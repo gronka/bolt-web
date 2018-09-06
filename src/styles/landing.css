@@ -1,0 +1,43 @@
+.landing-container {
+	display: flex;
+	flex-flow: row nowrap;
+	width: 100%;
+	height: 100%;
+}
+
+.landing__filters {
+	flex: 0 0 250px;
+	height: 100%;
+	padding-top: 10px;
+	display: flex;
+	flex-flow: column wrap;
+}
+
+.landing__filter-row {
+	flex: 1 1 16px;
+	padding: 0 10px;
+	padding-bottom: 12px;
+	max-height: 70px;
+}
+
+.landing__filter-row input {
+	min-width: 100%;
+}
+
+.landing__filter__deets-container {
+	max-width: 80%;
+	padding: 0;
+	display: flex;
+	flex-flow: row nowrap;
+
+}
+
+.landing__filter-row label {
+	font-size: 14px;
+	font-weight: normal;
+}
+
+/*.landing__map {*/
+	/*flex: 0 1 100%;*/
+	/*height: 100%;*/
+/*}*/

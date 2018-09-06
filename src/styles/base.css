@@ -1,0 +1,41 @@
+html, body, #root {
+	height: 100%;
+}
+
+.base-container {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+}
+
+.flashmsgs-list {
+	position: fixed;
+	width: 75%;
+	top: 100px;
+	left: 50%;
+	margin-left: -37.5%;
+	word-wrap: break-word;
+	z-index: 99;
+}
+
+.flashmsg {
+	position: relative;
+	padding: 10px 22px;
+	margin-bottom: 10px;
+	font-size: 18px;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
+}
+
+.flashmsg__close {
+	position: absolute;
+	top: 3px;
+	right: 5px;
+	cursor: pointer;
+	font-color: white;
+}
+
+.flashmsg__error {
+	background: red;
+}

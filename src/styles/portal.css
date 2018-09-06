@@ -1,0 +1,59 @@
+.portal-container {
+	flex: 0 0 34px;
+    text-align: center;
+    background-color: #EEE;
+}
+
+.portal__left-group {
+    display: inline-block;
+    float: left;
+}
+
+.portal__right-group {
+    display: inline-block;
+    float: right;
+    vertical-align: middle;
+}
+
+.portal__brand {
+    font-size: 16px;
+}
+
+.portal__item {
+    display: inline-block;
+    float: left;
+    padding: 6px 10px 6px 10px;
+    font-size: 16px;
+	color: #333;
+}
+
+.portal__separator {
+    display: inline-block;
+    width: 2px;
+    background-color: #FFF;
+    height: 30px;
+    float: left;
+    margin: 2px 0;
+}
+
+a.active {
+    background-color: #DDD;
+	color: #333;
+	text-decoration: none;
+}
+
+a.portal__item:active {
+	color: inherit;
+	text-decoration: none;
+}
+
+a.portal__item:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+a.portal__item:link {
+	color: inherit;
+	text-decoration: none;
+}
+
