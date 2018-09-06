@@ -1,4 +1,6 @@
-import { observable } from 'mobx'
+import { action, observable } from 'mobx'
+
+import AxiosStore from './AxiosStore'
 
 
 class AuthStore {
@@ -6,6 +8,11 @@ class AuthStore {
 	@observable jwt = ""
 	@observable email = ''
 	//@observable password = ''
+	
+	@action updateJwt(jwt) {
+		this.jwt = jwt
+		AxiosStore.remakeAxios(jwt)
+	}
 
 }
 

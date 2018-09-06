@@ -1,8 +1,6 @@
 import { observable, action } from 'mobx'
 
-import axios from 'axios'
-
-import { conf } from '../conf'
+import AxiosStore from './AxiosStore'
 
 
 class MapStore {
@@ -35,13 +33,13 @@ class MapStore {
 		//}
 		// TODO: change this to /events/tacs or w.e it will be
 		let path = "/events"
-		let url = `${conf["bapi"]}${path}`
 
 
-		axios.get(url, {headers: {"X-Session-Token": "asdf"}})
+		AxiosStore.ax.get(path)
 			.then((resp) => {
-					this.markers[this.activeMap] = resp.data["m"]
-					//alert(JSON.stringify(this.markers[this.activeMap]))
+					//this.markers[this.activeMap] = resp.data["m"]
+					//alert(JSON.stringify(resp.data["m"]))
+					//alert(JSON.stringify(resp.data))
 			})
 
 	}

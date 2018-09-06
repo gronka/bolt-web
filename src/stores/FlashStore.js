@@ -24,6 +24,14 @@ class FlashStore {
 		this.msgs.splice(p, 1)
 	}
 
+	@action unpackFlashMsgs(p) {
+		if (p.flashMsgs != null) {
+			for (let i=0; i<p.flashMsgs.length; i++) {
+				this.addFlash(p.flashMsgs[i].msg, p.flashMsgs[i].severity)
+			}
+		}
+	}
+
 }
 
 

@@ -4,6 +4,7 @@ import BaseRouter from './components/base'
 import { Provider } from 'mobx-react'
 
 import AuthStore from './stores/AuthStore'
+import AxiosStore from './stores/AxiosStore'
 import FlashStore from './stores/FlashStore'
 import LoginForm from './stores/LoginForm'
 import MapStore from './stores/MapStore'
@@ -17,6 +18,7 @@ import './styles/two-col-simple.css'
 
 const stores = {
 	AuthStore,
+	AxiosStore,
 	FlashStore,
 	LoginForm,
 	MapStore,

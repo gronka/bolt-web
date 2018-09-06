@@ -1,13 +1,20 @@
 import { computed, observable, action } from 'mobx'
 
-import axios from 'axios'
-
 import { conf } from '../conf'
 import AuthStore from './AuthStore'
+import AxiosStore from './AxiosStore'
 import FlashStore from './FlashStore'
 
 
 class LoginForm {
+	constructor() {
+		if (conf["autoLogin"]) {
+			this.email = conf["autoLoginEmail"]
+			this.password = conf["autoLoginPassword"]
+			this.submit()
+		}
+	}
+
 	@observable email = ''
 	@observable password = ''
 
@@ -28,15 +35,14 @@ class LoginForm {
 	submit() {
 		let data = Object.assign(this)
 		let path = "/user/login"
-		let url = `${conf["bapi"]}${path}`
-		axios.post(url, data)
+		AxiosStore.ax.post(path, data)
 		.then((resp) => {
 			if (resp.data.i === "login accepted") {
 				//alert("login accepted")
 				AuthStore.loggedIn = true
-				AuthStore.jwt = resp.data.b.jwt
 				AuthStore.email = data.email
-				FlashStore.addFlash(JSON.stringify(AuthStore.jwt))
+				AuthStore.updateJwt(resp.data.b.jwt)
+				//FlashStore.addFlash(JSON.stringify(AuthStore.jwt))
 			}
 		})
 	}

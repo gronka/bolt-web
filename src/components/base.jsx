@@ -2,7 +2,7 @@ import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import axios from 'axios'
+//import axios from 'axios'
 
 import Portal from './portal'
 import Login from './user/login'
@@ -10,28 +10,12 @@ import Register from './user/register'
 import Landing from './landing/landing'
 
 
-@inject('FlashStore')
+@inject('FlashStore', 'AuthStore')
 @observer
 class BaseRouter extends React.Component {
 
+	// Set defaults for the Bolt application
 	componentWillMount() {
-		let fs = this.props.FlashStore
-		axios.interceptors.response.use(
-			function(resp) {
-				if (resp.data == null) {
-					fs.addFlash("Axios returned null response.", "error")
-				} else {
-					return Promise.resolve(resp)
-				}
-			}, 
-
-			function (error) {
-				fs.addFlash(error.message, "error")
-				//if(error.response.status === 401) {
-					//return Promise.reject(error);
-				//}
-				return Promise.reject(error)
-			});
 	}
 
 	render() {
