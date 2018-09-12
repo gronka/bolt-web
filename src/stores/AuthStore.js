@@ -7,6 +7,7 @@ class AuthStore {
 	@observable loggedIn = false
 	@observable jwt = ""
 	@observable email = ''
+	@observable userUuid = ''
 	//@observable password = ''
 	
 	@action updateJwt(jwt) {

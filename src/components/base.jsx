@@ -2,21 +2,20 @@ import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-//import axios from 'axios'
-
 import Portal from './portal'
-import Login from './user/login'
-import Register from './user/register'
 import Landing from './landing/landing'
+
+import EventCreate from './event/create'
+
+import Login from './user/login'
+import ManageRouter from './user/manageRouter'
+import Profile from './user/profile'
+import Register from './user/register'
 
 
 @inject('FlashStore', 'AuthStore')
 @observer
 class BaseRouter extends React.Component {
-
-	// Set defaults for the Bolt application
-	componentWillMount() {
-	}
 
 	render() {
 		//alert(window.location.pathname)
@@ -33,8 +32,13 @@ class BaseRouter extends React.Component {
 						<Route exact path="/food" component={Landing} />
 						<Route exact path="/open" component={Landing} />
 
+						<Route exact path="/event/create" component={EventCreate} />
+
 						<Route exact path="/login" component={Login} />
 						<Route exact path="/register" component={Register} />
+						<Route exact path="/u/profile" component={Profile} />
+						<Route exact path="/u/manage" component={ManageRouter} />
+						<Route path="/u/:userUuid" component={Profile} />
 					</Switch>
 
 					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous" />

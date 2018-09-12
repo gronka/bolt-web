@@ -1,0 +1,22 @@
+.links-with-view {
+	margin: 0 auto;
+	width: 900px;
+}
+
+.links-with-view__title {
+	display: block;
+	margin: 0 auto;
+	margin-left: 25%;
+}
+
+.links-with-view__links {
+	display: inline-block;
+	margin: 0 auto;
+	width: 25%;
+}
+
+.links-with-view__view {
+	display: inline-block;
+	margin: 0 auto;
+	width: 75%;
+}

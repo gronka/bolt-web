@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 
 
-@inject('LoginForm', 'RegisterForm')
+@inject('LoginForm', 'RegisterForm', 'EventCreateForm')
 @observer
 export class InputRow extends Component {
 	constructor(props) {
@@ -11,7 +11,10 @@ export class InputRow extends Component {
 			this.store = props.LoginForm
 		} else if (props.store === "RegisterForm") {
 			this.store = props.RegisterForm
+		} else if (props.store === "EventCreateForm") {
+			this.store = props.EventCreateForm
 		}
+
 		this.name = props.name
 		this.htmlName = this.name.toLowerCase().replace(" ", "_")
 		this.getValue = props.getValue

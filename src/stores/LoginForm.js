@@ -3,7 +3,6 @@ import { computed, observable, action } from 'mobx'
 import { conf } from '../conf'
 import AuthStore from './AuthStore'
 import AxiosStore from './AxiosStore'
-import FlashStore from './FlashStore'
 
 
 class LoginForm {
@@ -32,7 +31,7 @@ class LoginForm {
 		return this.password
 	}
 
-	submit() {
+	@action submit() {
 		let data = Object.assign(this)
 		let path = "/user/login"
 		AxiosStore.ax.post(path, data)
@@ -42,7 +41,6 @@ class LoginForm {
 				AuthStore.loggedIn = true
 				AuthStore.email = data.email
 				AuthStore.updateJwt(resp.data.b.jwt)
-				//FlashStore.addFlash(JSON.stringify(AuthStore.jwt))
 			}
 		})
 	}

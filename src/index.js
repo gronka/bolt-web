@@ -6,24 +6,31 @@ import { Provider } from 'mobx-react'
 import AuthStore from './stores/AuthStore'
 import AxiosStore from './stores/AxiosStore'
 import FlashStore from './stores/FlashStore'
-import LoginForm from './stores/LoginForm'
 import MapStore from './stores/MapStore'
-import RegisterForm from './stores/RegisterForm'
 import UiStore from './stores/UiStore'
+
+import LoginForm from './stores/LoginForm'
+import RegisterForm from './stores/RegisterForm'
+
+import EventCreateForm from './stores/EventCreateForm'
 
 import './styles/base.css'
 import './styles/landing.css'
 import './styles/portal.css'
+import './styles/links-with-view.css'
 import './styles/two-col-simple.css'
 
 const stores = {
 	AuthStore,
 	AxiosStore,
 	FlashStore,
-	LoginForm,
 	MapStore,
-	RegisterForm,
 	UiStore,
+
+	LoginForm,
+	RegisterForm,
+
+	EventCreateForm,
 }
 
 const Root = (
