@@ -4,15 +4,9 @@ import { inject } from 'mobx-react'
 
 import EventsLandingFilters from './eventsLandingFilters'
 import FoodLandingFilters from './foodLandingFilters'
-import LandingMap from './landingMap'
-import LandingMap2 from './landingMap2'
+import GoogleMap from './googleMap'
 import OpenLandingFilters from './openLandingFilters'
 
-
-var wh_100 = {
-	width: '100%',
-	height: '100%',
-}
 
 @inject('MapStore')
 class Landing extends React.Component {
@@ -42,19 +36,12 @@ class Landing extends React.Component {
 					<Route exact path="/open" component={OpenLandingFilters} />
 				</Switch>
 
-				<LandingMap2 />
+				<GoogleMap />
 
 			</div>
 		)
 	}
 }
-				//<LandingMap 
-					//isMarkerShown 
-					//googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYA2e8zpmUSRK3LiLPtlQCyT4VNWdjsD4&v=3.exp&libraries=geometry,drawing,places"
-					//loadingElement={<div style={wh_100} />}
-					//containerElement={<div style={wh_100} />}
-					//mapElement={<div style={wh_100} />}
-				///>
 
 
 export default Landing

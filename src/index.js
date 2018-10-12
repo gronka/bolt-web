@@ -19,6 +19,7 @@ import './styles/landing.css'
 import './styles/portal.css'
 import './styles/links-with-view.css'
 import './styles/two-col-simple.css'
+import './styles/markers.css'
 
 const stores = {
 	AuthStore,

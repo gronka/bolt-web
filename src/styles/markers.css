@@ -1,0 +1,28 @@
+.marker {
+	z-index: 99;
+	cursor: pointer;
+	font-size: 18px;
+	position: absolute;
+	/*top: 50%;*/
+	/*left: 50%;*/
+	width: 18px;
+	height: 18px;
+	background-color: #000;
+	border: 2px solid #fff;
+	border-radius: 100%;
+	user-select: none;
+	transform: translate(-50%, -50%);
+}
+
+.marker:hover {
+	text: white;
+	z-index: 1;
+}
+
+.event-marker__text {
+	width: 80px;
+}
+
+.event-marker__text:hover {
+	text: white;
+}
