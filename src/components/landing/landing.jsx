@@ -8,21 +8,27 @@ import GoogleMap from './googleMap'
 import OpenLandingFilters from './openLandingFilters'
 
 
-@inject('MapStore')
+@inject('MapController')
 class Landing extends React.Component {
 
-	componentDidMount() {
-		// assureMapInterval makes sure that the correct map is loaded to avoid
-		// bugs that could occur from changing maps from an unknown source.
-		this.assureMapInterval = setInterval( () => {
-			let board = window.location.pathname.split("/")[1]
-			this.props.MapStore.changeMap(board)
-		}
-		, 10000 )
-	}
+	// TODO: determine if this is needed or not
+	//componentDidMount() {
+		//// assureMapInterval makes sure that the correct map is loaded to avoid
+		//// bugs that could occur from changing maps from an unknown source.
+		//this.assureMapInterval = setInterval( () => {
+			//let board = window.location.pathname.split("/")[1]
+			//this.props.MapController.changeMap(board)
+		//}
+		//, 10000 )
+	//}
 
-	componentWillUnmount() {
-		clearInterval(this.assureMapInterval)
+	//componentWillUnmount() {
+		//clearInterval(this.assureMapInterval)
+	//}
+	
+	componentDidUpdate() {
+		var board = window.location.pathname.split("/")[1]
+		this.props.MapController.changeMap(board)
 	}
 
 	render() {

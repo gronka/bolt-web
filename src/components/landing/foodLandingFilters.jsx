@@ -2,12 +2,7 @@ import React from 'react'
 import { inject } from 'mobx-react'
 
 
-@inject('MapStore')
 class FoodLandingFilters extends React.Component {
-
-	componentDidMount() {
-		this.props.MapStore.changeMap("food")
-	}
 
 	render() {
 		return (

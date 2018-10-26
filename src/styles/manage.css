@@ -1,0 +1,24 @@
+.manageNav {
+	margin: 0 auto;
+	width: 900px;
+}
+
+.manageNav__links {
+	display: inline-block;
+	float: left;
+	margin: 0 auto;
+	width: 25%;
+}
+
+.manageNav__links__link {
+	float: left;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.manageNav__body {
+	display: inline-block;
+	float: left;
+	margin: 0 auto;
+	width: 75%;
+}

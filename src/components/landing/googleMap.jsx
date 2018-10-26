@@ -1,44 +1,34 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
-
-import { conf } from '../../conf'
-
-/*global google*/
+import { inject } from 'mobx-react'
 
 
-//@inject ('MapStore')
-//@observer
+@inject ('MapController')
 export default class GoogleMap extends React.Component {
-	static defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
-    },
-    zoom: 11
-  }
+	constructor(props) {
+		super(props)
+		this.mapType = this.props.mapType
+		this.mapDivName = this.props.mapDivName
+	}
 
 	shouldComponentUpdate() {
 		return false
 	}
 
 	componentDidMount() {
-		// TODO: possibly load maps scripts async, then create a function to defer
-		// this init step
-		//this.props.MapStore.getTacs()
-		this.map = new google.maps.Map(this.refs.map, {
-			center: { lat: -59.95, lng: 30.33 },
-			zoom: 11,
+		var board = window.location.pathname.split("/")[1]
+		this.props.MapController.createMap({
+			name: board,
+			type: "landing",
+			mapDivName: "landingMap",
 		})
+
+		this.props.MapController.changeMap(board)
 	}
 
 	render() {
-		//this.props.MapStore.getTacs()
-		//let eventTacs = this.props.MapStore.markers.events
-		//debugger
-
 		return (
 			<div style={{ height: '100%', width: '100%' }}>
-				<div className="gmap" ref="map">
+				<div className="gmap landingMap" ref="map">
 
 				</div>
 			</div>
@@ -46,16 +36,3 @@ export default class GoogleMap extends React.Component {
 	}
 }
 
-
-class Marker extends React.Component {
-	render() {
-		return (
-			<div className="marker event-marker__container">
-				<img src="/static/map/red-marker.svg" alt="" />
-				<div class="event-marker__text">
-					{this.props.text}
-				</div>
-			</div>
-		)
-	}
-}

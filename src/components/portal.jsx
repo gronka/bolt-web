@@ -1,9 +1,10 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 
 
 @inject('AuthStore')
+@withRouter
 @observer
 class Portal extends React.Component {
 
@@ -13,32 +14,36 @@ class Portal extends React.Component {
 			<div className="portal-container">
 				<div className="portal__left-group">
 
-					<NavLink to="/" 
+					<NavLink exact to="/" 
 						className="portal__item portal__brand"
 						>Bolt
 					</NavLink>
 					<div className="portal__separator"></div>
 
-					<NavLink to="/events" 
+					<NavLink exact to="/events" 
 						className="portal__item"
+						activeClassName="portal__item-active"
 						>Events
 					</NavLink>
 					<div className="portal__separator"></div>
 
-					<NavLink to="/food" 
+					<NavLink exact to="/food" 
 						className="portal__item"
-					>Food
+						activeClassName="portal__item-active"
+						>Food
 					</NavLink>
 					<div className="portal__separator"></div>
 
 					<NavLink to="/open" 
 						className="portal__item"
-					>Open Now</NavLink>
+						activeClassName="portal__item-active"
+						>Open Now</NavLink>
 					<div className="portal__separator"></div>
 
 					<NavLink to="/event/create" 
 						className="portal__item"
-					>Plan an Event</NavLink>
+						activeClassName="portal__item-active"
+						>Plan an Event</NavLink>
 				</div>
 
 
@@ -48,21 +53,31 @@ class Portal extends React.Component {
 					? (
 						<div className="portal__chunk">
 							<NavLink to="/browse" 
-								className="portal__item">Browse</NavLink>
+								className="portal__item"
+								activeClassName="portal__item-active"
+								>Browse</NavLink>
 							<div className="portal__separator"></div>
 
 							<NavLink to="/u/manage" 
-								className="portal__item">My Pages</NavLink>
+								className="portal__item"
+								activeClassName="portal__item-active"
+								>My Pages</NavLink>
 							<div className="portal__separator"></div>
 						</div>
 
 					)
 					: (
 						<div className="portal__chunk">
-							<NavLink to="/register" className="portal__item">Register</NavLink>
+							<NavLink to="/register" 
+								className="portal__item"
+								activeClassName="portal__item-active"
+								>Register</NavLink>
 							<div className="portal__separator"></div>
 
-							<NavLink className="portal__item" to="/login">Log In</NavLink>
+							<NavLink to="/login"
+								className="portal__item" 
+								activeClassName="portal__item-active"
+								>Log In</NavLink>
 						</div>
 
 					)

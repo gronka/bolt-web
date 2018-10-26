@@ -62,3 +62,7 @@ a.portal__item:link {
 	text-decoration: none;
 }
 
+.portal__item-active {
+	background-color: #CCC;
+}
+
