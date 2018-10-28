@@ -1,4 +1,6 @@
+import { observable, action } from 'mobx'
 import AxiosStore from './AxiosStore'
+
 import { debounce } from '../helpers'
 import MapSettingsStore from './MapSettingsStore'
 
@@ -19,17 +21,21 @@ import MapSettingsStore from './MapSettingsStore'
 	//}
 
 class MapController {
+	@observable activeMap = "activeMapNotSet"
+
 	constructor(opts) {
 		this.google = "googleNotSet"
 
 		this.map = "mapNotSet"
-		this.activeMap = "activeMapNotSet"
 		this.listenerTypes = ["center_changed", "click"]
 
 		this.mapTypes = {
 			landing: {
 				listeners: ["center_changed_get_tacs"],
 				names: ["landing", "events", "food", "open"],
+			},
+			eventCreate: {
+				listeners: [""],
 			},
 		}
 
@@ -45,6 +51,14 @@ class MapController {
 		this.google = google
 	}
 
+	initMap(opts) {
+		var mapDiv = document.getElementById("gmapContainer")
+		this.map = new this.google.maps.Map(mapDiv, {
+			center: this.defaultCenter,
+			zoom: 11,
+		})
+	}
+
 	createMap(opts) {
 		// opts: 
 		//	name: key for storage and lookup
@@ -58,6 +72,10 @@ class MapController {
 
 		//	center: list of str designating which listeners this map uses
 		var center = opts.center || this.defaultCenter
+
+		if (this.map === "mapNotSet") {
+			this.initMap()
+		}
 
 		if (MapSettingsStore.maps[name] != null) {
 			return
@@ -118,9 +136,9 @@ class MapController {
 		}
 	}
 
-	changeMap(name) {
+	@action changeMap(name) {
 		if (this.google !== "googleNotSet") {
-			if (this.activeMap !== name) {
+			//if (this.activeMap !== name) {
 				this.activeMap = name
 				this.resetMap()
 				if (MapSettingsStore.maps[name] != null) {
@@ -129,7 +147,7 @@ class MapController {
 				} else {
 					//alert("map missing from store")
 				}
-			}
+			//}
 		}
 	}
 
@@ -141,13 +159,11 @@ class MapController {
 
 		this.activeMap = stg.name
 
-		var mapDiv = document.getElementsByClassName(stg.mapDivName)[0]
-		//debugger
+		var mapTargetDiv = document.getElementsByClassName(stg.mapDivName)[0]
+		var mapContainer = this.map.getDiv()
 
-		this.map = new this.google.maps.Map(mapDiv, {
-			center: stg.center,
-			zoom: 11,
-		})
+		//mapContainer.parentNode.removeChild(mapContainer)
+		mapTargetDiv.appendChild(mapContainer)
 
 		//	listeners: list of str designating which listeners this map uses
 		var listeners = this.mapTypes[stg.type]["listeners"]
@@ -187,8 +203,6 @@ class MapSettings {
 		//AxiosStore.ax.get(path)
 			//.then((resp) => {
 					//this.markers[this.activeMap] = resp.data["m"]
-					//alert(JSON.stringify(resp.data["m"]))
-					//alert(JSON.stringify(resp.data))
 			//})
 
 		let tacs = [

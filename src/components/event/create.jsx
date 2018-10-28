@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 
 import { InputRow } from '../pieces'
+import GoogleMap from '../googleMap'
 
 
-@inject('EventCreateForm')
+@inject('EventCreateForm', 'MapController')
+@observer
 class EventCreate extends Component {
   execEventCreate = () => this.props.EventCreateForm.submit()
+
+	//componentDidUpdate() {
+		//this.props.MapController.changeMap("eventCreate")
+	//}
 
 	render() {
 		return (
@@ -28,7 +34,16 @@ class EventCreate extends Component {
 					store="EventCreateForm"
 					getValue="getAddress"
 					onChange="setAddress"
+					addClasses="eventCreateMapAddress"
 				/>
+
+				<GoogleMap name="eventCreate"
+					type="eventCreate"
+					mapDivName="eventCreateMap"
+					linkAddress="eventCreateMapAddress"
+					height="400px"
+					width="100%"
+					/>
 
 				<InputRow name="Event Starts At"
 					store="EventCreateForm"

@@ -2,14 +2,19 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { inject } from 'mobx-react'
 
+import { getActiveMapName } from '../../helpers'
 import EventsLandingFilters from './eventsLandingFilters'
 import FoodLandingFilters from './foodLandingFilters'
-import GoogleMap from './googleMap'
+import GoogleMap from '../googleMap'
 import OpenLandingFilters from './openLandingFilters'
 
 
 @inject('MapController')
 class Landing extends React.Component {
+	constructor(props) {
+		super(props)
+		this.activeMapName = getActiveMapName()
+	}
 
 	// TODO: determine if this is needed or not
 	//componentDidMount() {
@@ -27,24 +32,20 @@ class Landing extends React.Component {
 	//}
 	
 	componentDidUpdate() {
-		var board = window.location.pathname.split("/")[1]
-		this.props.MapController.changeMap(board)
+		this.activeMapName = getActiveMapName()
+		this.props.MapController.changeMap(this.activeMapName)
 	}
 
 	render() {
 		return (
-			<div className="landing-container">
-				<Switch>
-					<Route exact path="/" component={EventsLandingFilters} />
-					<Route exact path="/event" component={EventsLandingFilters} />
-					<Route exact path="/events" component={EventsLandingFilters} />
-					<Route exact path="/food" component={FoodLandingFilters} />
-					<Route exact path="/open" component={OpenLandingFilters} />
-				</Switch>
+			<Switch>
+				<Route exact path="/" component={EventsLandingFilters} />
+				<Route exact path="/event" component={EventsLandingFilters} />
+				<Route exact path="/events" component={EventsLandingFilters} />
+				<Route exact path="/food" component={FoodLandingFilters} />
+				<Route exact path="/open" component={OpenLandingFilters} />
+			</Switch>
 
-				<GoogleMap />
-
-			</div>
 		)
 	}
 }

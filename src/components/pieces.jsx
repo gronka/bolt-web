@@ -19,6 +19,7 @@ export class InputRow extends Component {
 		this.htmlName = this.name.toLowerCase().replace(" ", "_")
 		this.getValue = props.getValue
 		this.onChange = props.onChange
+		this.addClasses = props.addClasses
 	}
 
 	setEmail = e => this.store.setEmail(e.target.value)
@@ -26,6 +27,14 @@ export class InputRow extends Component {
 	setPassword = e => this.store.setPassword(e.target.value)
 	setVerifyPassword = e => this.store.setVerifyPassword(e.target.value)
 	setFullName = e => this.store.setFullName(e.target.value)
+	setPhone = e => this.store.setPhone(e.target.value)
+
+	setTitle = e => this.store.setTitle(e.target.value)
+	setVenue = e => this.store.setVenue(e.target.value)
+	setStartTimeUnix = e => this.store.setStartTimeUnix(e.target.value)
+	setEndTimeUnix = e => this.store.setEndTimeUnix(e.target.value)
+	setDescription = e => this.store.setDescription(e.target.value)
+	setQuickInfo = e => this.store.setQuickInfo(e.target.value)
 	setPhone = e => this.store.setPhone(e.target.value)
 
 	render() {
@@ -37,7 +46,7 @@ export class InputRow extends Component {
 				</div>
 
 				<div className="two-col-simple__right">
-					<input className="two-col-simple__right-input" 
+					<input className={"two-col-simple__right-input " + this.addClasses}
 						id={this.htmlName}
 						type="text" 
 						name={this.htmlName}

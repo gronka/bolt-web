@@ -28,3 +28,12 @@ export function debounce(func, wait, immediate) {
 		if (immediate && !timeout) func.apply(context, args);
 	};
 }
+
+
+export function getActiveMapName() {
+	var activeMapName = window.location.pathname.split("/")[1]
+	if (window.location.pathname === "/") {
+		activeMapName = "events"
+	}
+	return activeMapName
+}

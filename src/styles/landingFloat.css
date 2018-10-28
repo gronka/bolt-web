@@ -1,0 +1,59 @@
+.stretch-vertical {
+	width: 100%;
+	height: 100%;
+}
+.landing-container {
+	float: left;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.landing__filters {
+	position: relative;
+	float: left;
+	width: 250px;
+	padding-top: 10px;
+}
+
+.landing__filter-row {
+	padding: 0 10px;
+	padding-bottom: 12px;
+	max-height: 70px;
+}
+
+.landing__filter-row input {
+	min-width: 100%;
+}
+
+.landing__filter__deets-container {
+	max-width: 80%;
+	padding: 0;
+
+}
+
+.landing__filter-row label {
+	font-size: 14px;
+	font-weight: normal;
+}
+
+/*.landing__map {*/
+	/*flex: 0 1 100%;*/
+	/*height: 100%;*/
+/*}*/
+
+.gmap {
+	position: relative;
+	float: left;
+	min-height: 200px;
+	min-width: 200px;
+	height: 100%;
+	width: calc(100% - 250px);
+}
+
+#gmapContainer {
+	width: 100%;
+	height: 100%;
+}
