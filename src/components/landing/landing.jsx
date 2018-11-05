@@ -5,7 +5,6 @@ import { inject } from 'mobx-react'
 import { getActiveMapName } from '../../helpers'
 import EventsLandingFilters from './eventsLandingFilters'
 import FoodLandingFilters from './foodLandingFilters'
-import GoogleMap from '../googleMap'
 import OpenLandingFilters from './openLandingFilters'
 
 

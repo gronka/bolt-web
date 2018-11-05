@@ -1,0 +1,11 @@
+.custom-lat-lng {
+	display: flex;
+}
+
+.custom-lat-lng__checkbox, .custom-lat-lng__lat, .custom-lat-lng__lng {
+
+}
+
+.custom-lat-lng__update-button {
+	cursor: pointer;
+}

@@ -1,11 +1,13 @@
 import React from 'react'
 import { inject } from 'mobx-react'
-import FlexView from 'react-flexview'
 
 
 @inject ('MapController')
 //@observer
 export default class GoogleMap extends React.Component {
+	//TODO: catch "ReferenceError: google is not defined" when google maps cannot
+	//be reached
+
 	constructor(props) {
 		super(props)
 		this.name = props.name

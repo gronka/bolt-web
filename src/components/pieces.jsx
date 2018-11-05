@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import Flatpickr from 'react-flatpickr'
 
 
 @inject('LoginForm', 'RegisterForm', 'EventCreateForm')
@@ -19,7 +20,9 @@ export class InputRow extends Component {
 		this.htmlName = this.name.toLowerCase().replace(" ", "_")
 		this.getValue = props.getValue
 		this.onChange = props.onChange
+		this.validate = props.validate
 		this.addClasses = props.addClasses
+		this.id = props.idOvrd || this.htmlName 
 	}
 
 	setEmail = e => this.store.setEmail(e.target.value)
@@ -31,11 +34,52 @@ export class InputRow extends Component {
 
 	setTitle = e => this.store.setTitle(e.target.value)
 	setVenue = e => this.store.setVenue(e.target.value)
-	setStartTimeUnix = e => this.store.setStartTimeUnix(e.target.value)
-	setEndTimeUnix = e => this.store.setEndTimeUnix(e.target.value)
+	setAddress = e => this.store.setAddress(e.target.value)
+	setStartDate = date => this.store.setStartDate(date)
+	setEndDate = date => this.store.setEndDate(date)
 	setDescription = e => this.store.setDescription(e.target.value)
 	setQuickInfo = e => this.store.setQuickInfo(e.target.value)
 	setPhone = e => this.store.setPhone(e.target.value)
+
+	displayComponentType() {
+		if (this.props.component == null) {
+			return(
+				<input className={"two-col-simple__right-input " + this.addClasses}
+					id={this.id}
+					type="text" 
+					name={this.htmlName}
+					placeholder={this.name} 
+					value={this.store[this.getValue]}
+					onChange={this[this.onChange]}
+				/>
+			)
+		}
+
+		if (this.props.component === "flatpickr") {
+			return (
+				<Flatpickr className={"two-col-simple__right-input " + this.addClasses} 
+					id={this.id}
+					placeholder={this.name} 
+					data-enable-time
+					value={this.store[this.getValue]}
+					onChange={(_, date) => this.store[this.onChange](date)} 
+				/>
+			)
+		}
+	}
+
+	fieldError() {
+		if (this.validate != null) {
+			var error = this.store[this.validate]
+			if (error) {
+				return (
+					<div>
+						{error}
+					</div>
+				)
+			}
+		}
+	}
 
 	render() {
 		return (
@@ -46,15 +90,14 @@ export class InputRow extends Component {
 				</div>
 
 				<div className="two-col-simple__right">
-					<input className={"two-col-simple__right-input " + this.addClasses}
-						id={this.htmlName}
-						type="text" 
-						name={this.htmlName}
-						placeholder={this.name} 
-						value={this.store[this.getValue]}
-						onChange={this[this.onChange]}
-					/>
+					{this.displayComponentType()}
 				</div>
+
+				<div className="two-col-simple__error">
+					{this.fieldError()}
+				</div>
+
+
 			</div>
 		);
 	}

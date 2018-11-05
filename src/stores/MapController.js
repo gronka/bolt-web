@@ -29,13 +29,17 @@ class MapController {
 		this.map = "mapNotSet"
 		this.listenerTypes = ["center_changed", "click"]
 
+		this.markers = []
+		// actually set in init
+		this.unaryMarker = null
+
 		this.mapTypes = {
 			landing: {
 				listeners: ["center_changed_get_tacs"],
 				names: ["landing", "events", "food", "open"],
 			},
 			eventCreate: {
-				listeners: [""],
+				listeners: ["create_tac_on_address_change"],
 			},
 		}
 
@@ -45,6 +49,8 @@ class MapController {
 			lng: 131.044,
 		}
 
+
+
 	}
 
 	storeGoogleRef(google) {
@@ -52,6 +58,7 @@ class MapController {
 	}
 
 	initMap(opts) {
+		this.unaryMarker = this.returnEmptyMarker()
 		var mapDiv = document.getElementById("gmapContainer")
 		this.map = new this.google.maps.Map(mapDiv, {
 			center: this.defaultCenter,
@@ -106,13 +113,22 @@ class MapController {
 
 	}
 
+	returnEmptyMarker() {
+		var emptyMarker = new this.google.maps.Marker({
+			map: null,
+			position: {lat: 0, lng: 0},
+			title: 'emptyMarker'
+		})
+		return emptyMarker
+	}
+
 	propagateMapType(type, settings) {
 		if (type === "landing") {
 
 		}
 	}
 
-	addCenterChangedGetTacsListeners() {
+	addCenterChangedGetTacsListener() {
 		this.google.maps.event.addListener(this.map, 
 																			 'center_changed', 
 																			 debounce(function() {
@@ -123,11 +139,32 @@ class MapController {
 		}, 400));
 	}
 
+	addCreateTacOnRightClickListener() {
+		this.google.maps.event.addListener(this.map, 
+																			 'rightclick', 
+																			 function(e) {
+			var cursorLatLng = e.latLng;
+			if (this.markerFromRightclick != null) {
+				this.markerFromRightclick.setMap(null);
+				this.markerFromRightclick = null;
+			}
+			//markerFromRightclick = new google.maps.Marker({
+				//position: cursorLatLng,
+				//icon: inactiveMarkerIcon,
+				//map: map
+			//})
+			//markerFromRightclick.setMap(map);
+			//infowindowFromRightclick.open(map, markerFromRightclick);
+																			 })
+	}
+
 	//
 	// Functions for clearing map
 	//
 	resetMap() {
 		this.clearAllListeners()
+		MapSettingsStore.maps[this.activeMap].reset()
+		this.loadMapFromSettings(this.activeMap)
 	}
 
 	clearAllListeners() {
@@ -137,6 +174,7 @@ class MapController {
 	}
 
 	@action changeMap(name) {
+		// TODO TODO: back up map settings here, stop storing in other places
 		if (this.google !== "googleNotSet") {
 			//if (this.activeMap !== name) {
 				this.activeMap = name
@@ -171,7 +209,11 @@ class MapController {
 		for (var i=0; i < listeners.length; i++) {
 			var listener = listeners[i]
 			if (listener === "center_changed_get_tacs") {
-				this.addCenterChangedGetTacsListeners()
+				this.addCenterChangedGetTacsListener()
+			}
+
+			if (listener === "create_tac_on_right_click") {
+				this.addCreateTacOnRightClickListener()
 			}
 
 			// TODO: add more of these
@@ -179,17 +221,45 @@ class MapController {
 
 	}
 
+	//
+	// Functions for map actions
+	//
+	panToLatLng(lat, lng) {
+		lat = parseFloat(lat)
+		lng = parseFloat(lng)
+		this.map.panTo({"lat": lat, "lng": lng})
+	}
+
+	updateUnaryMarker(p) {
+		var lat = parseFloat(p.lat)
+		var lng = parseFloat(p.lng)
+
+		this.unaryMarker.setMap(null)
+		this.unaryMarker = new this.google.maps.Marker({
+			map: this.map,
+			position: {lat: lat, lng: lng},
+		})
+	}
+
+
+
 }
 
 
 class MapSettings {
-	name = "events"
+	name = ""
 	userLat = 35.7796
 	userLng = -78.6382
 	type = "typeNotSet"
-	markers = []
 	mapDivName = "mapDivNameNotSet"
 	map = "mapNotSet"
+	markers = []
+	unaryMarker = null
+
+	reset() {
+		this.markers = []
+		this.unaryMarker = null
+	}
 
 	getTacsInBounds() {
 		// TODO: detect lat and lng, then guess it. For now, it's Raleigh

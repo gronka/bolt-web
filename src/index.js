@@ -16,11 +16,14 @@ import RegisterForm from './stores/RegisterForm'
 import EventCreateForm from './stores/EventCreateForm'
 
 import './styles/base.css'
+import './styles/custom-lat-lng.css'
 import './styles/landing.css'
 import './styles/portal.css'
 import './styles/manage.css'
 import './styles/two-col-simple.css'
+import './styles/custom-lat-lng.css'
 import './styles/markers.css'
+import 'flatpickr/dist/themes/material_green.css'
 
 const stores = {
 	AuthStore,

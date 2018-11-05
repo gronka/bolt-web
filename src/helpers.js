@@ -1,3 +1,14 @@
+export function isFloat(p) {
+	//debugger
+	p = p.toString()
+	const numReg = /^[0-9-]*\.?[0-9]*$/
+	if (p.match(numReg)) {
+		return true
+	}
+	return false
+}
+
+
 export function formToJson(formId) {
 	let form = document.getElementById(formId)
 	let obj = {}
@@ -36,4 +47,22 @@ export function getActiveMapName() {
 		activeMapName = "events"
 	}
 	return activeMapName
+}
+
+
+export class Loc {
+	constructor(address, lat, lng) {
+		this.address = address
+		this.lat = lat
+		this.lng = lng
+	}
+}
+
+
+export function round(num, digits, decimal=true) {
+	// TODO: if decimal = false
+	var place = Math.pow(10, digits)
+	var shifted = place * num
+	var shiftedRounded = Math.round(shifted)
+	return shiftedRounded / place
 }
