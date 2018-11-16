@@ -1,0 +1,60 @@
+.eventList {
+	padding: 6px;
+}
+
+.eventLine {
+	padding: 6px 0px;
+}
+
+.eventList__title {
+	padding-bottom: 8px;
+	font-size: 26px;
+}
+
+.eventLine__bubble {
+	display: flex;
+	flex-direction: row;
+	height: 100px;
+
+	border-radius: 12px;
+	border: 1px solid #18ab29;
+
+}
+
+.eventLine__images {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: row;
+	max-width: 300px;
+	padding-right: 10px;
+}
+
+.eventLine__images img {
+	align-self: center;
+	max-width: 100%;
+	max-height: 100%;
+	vertical-align: middle;
+}
+
+.eventLine__images__logo {
+	padding: 6px;
+}
+
+.eventLine__images__mapCap {
+	padding: 6px;
+	flex-basis: 120px;
+}
+
+.eventLine__info {
+	flex-grow: 2;
+	display: flex;
+	flex-direction: column;
+}
+
+.eventLine__info__title {
+	height: 30px;
+	font-size: 20px;
+}
+
+.eventLine__info__mapCap {
+}

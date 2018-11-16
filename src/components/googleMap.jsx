@@ -34,19 +34,6 @@ export default class GoogleMap extends React.Component {
 		this.props.MapController.changeMap(this.name)
 	}
 
-	//render() {
-		//return (
-				//<FlexView width="100%"  height="100%" grow >
-					//<FlexView className="gmapWrapper" grow
-						//height={this.height} width={this.width}>
-
-						//<div className={"gmap " + this.mapDivName} ref="map">	</div>
-				//</FlexView>
-			//</FlexView>
-
-		//)
-	//}
-
 	render() {
 		return (
 			<div className="gmapWrapper" style={{ height: this.height, width: this.width }}>

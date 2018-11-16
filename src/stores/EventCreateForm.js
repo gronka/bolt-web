@@ -1,6 +1,7 @@
 import { computed, observable, action } from 'mobx'
 
 import AxiosStore from './AxiosStore'
+import AuthStore from './AuthStore'
 import FlashStore from './FlashStore'
 import MapController from './MapController'
 import { isFloat, Loc, round } from '../helpers'
@@ -190,7 +191,6 @@ class EventCreateForm {
 	}
 
 	submit() {
-		debugger
 		var data = {
 			"title": this.title,
 			"venue": this.venue,
@@ -202,12 +202,13 @@ class EventCreateForm {
 			"description": this.description,
 			"quickInfo": this.quickInfo,
 			"phone": this.phone,
+			"userUuid": AuthStore.userUuid,
 		}
 
 		var error = this.validateSubmit(data)
 		FlashStore.addFlash(error, "error")
 
-		AxiosStore.ax.post("/api/v1/event/create", data)
+		AxiosStore.ax.post("/event/create", data)
 	}
 }
 

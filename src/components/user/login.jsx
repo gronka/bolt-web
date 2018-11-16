@@ -1,12 +1,21 @@
 import React, { Component } from 'react'
 import { inject } from 'mobx-react'
+import { withRouter } from 'react-router'
 
 import { InputRow } from '../pieces'
 
 
 @inject('LoginForm')
+@withRouter
 export class Login extends Component {
-	submit = () => this.props.LoginForm.submit()
+	constructor(props) {
+		super(props)
+	}
+
+	submit = () => {
+		this.props.LoginForm.submit()
+		this.props.history.push('/emptyPage')
+	}
 
 	render() {
 		return (
@@ -40,6 +49,3 @@ export class Login extends Component {
 
 
 export default Login
-
-//const Login = ({ classes }) => (
-//)

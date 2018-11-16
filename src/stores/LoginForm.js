@@ -1,4 +1,5 @@
 import { computed, observable, action } from 'mobx'
+import { browserHistory } from 'react-router-dom'
 
 import { conf } from '../conf'
 import AuthStore from './AuthStore'
@@ -37,12 +38,18 @@ class LoginForm {
 		AxiosStore.ax.post(path, data)
 		.then((resp) => {
 			if (resp.data.i === "login accepted") {
-				//alert("login accepted")
-				AuthStore.loggedIn = true
-				AuthStore.email = data.email
-				AuthStore.updateJwt(resp.data.b.jwt)
+				this.updateAuthStore(resp)
 			}
 		})
+	}
+
+	@action updateAuthStore(resp) {
+		AuthStore.loggedIn = true
+		var jwt = resp.data.b.jwt
+		var claims = JSON.parse(atob(jwt.split('.')[1]))
+		AuthStore.email = claims.email
+		AuthStore.userUuid = claims.userUuid
+		AuthStore.updateJwt(jwt)
 	}
 }
 

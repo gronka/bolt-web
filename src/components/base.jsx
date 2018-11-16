@@ -7,12 +7,11 @@ import Landing from './landing/landing'
 
 import EventCreate from './event/create'
 
+import EmptyPage from './emptyPage'
 import Login from './user/login'
 import ManageApp from './user/manageApp'
 import Profile from './user/profile'
 import Register from './user/register'
-
-//import ManageEvents from './user/manageApp'
 
 
 /*global google*/
@@ -31,6 +30,7 @@ class BaseRouter extends React.Component {
 		//alert(window.location.pathname)
 		//
 						//<Route exact path="/u/manage/events" component={ManageEvents} />
+	
 		return (
 			<BrowserRouter>
 				<div className="base-container">
@@ -46,6 +46,7 @@ class BaseRouter extends React.Component {
 
 						<Route exact path="/event/create" component={EventCreate} />
 
+						<Route exact path="/emptyPage" component={EmptyPage} />
 						<Route exact path="/login" component={Login} />
 						<Route exact path="/register" component={Register} />
 

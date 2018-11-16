@@ -29,6 +29,9 @@ export function validateByName(name, data, opts={}) {
 				return name + " must be between -180 and 180."
 			}
 			break
+
+		default:
+			break
 	}
 
 }

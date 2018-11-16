@@ -1,11 +1,20 @@
+import UiStore from './stores/UiStore'
+
+
 export function isFloat(p) {
-	//debugger
 	p = p.toString()
 	const numReg = /^[0-9-]*\.?[0-9]*$/
 	if (p.match(numReg)) {
 		return true
 	}
 	return false
+}
+
+
+export function formatUnixTimeForEventLine(unixTime) {
+	var options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'};
+	var date = new Date(unixTime)
+	return date.toLocaleDateString(UiStore.locale, options)
 }
 
 

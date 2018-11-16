@@ -2,45 +2,37 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 
 
-@inject('AuthStore', 'AxiosStore')
+@inject('AuthStore', 'AxiosStore', 'CurrentProfileStore')
 @observer
 export class Profile extends Component {
 
 	constructor(props) {
 		super(props)
+		this.CPS = this.props.CurrentProfileStore
 
-		this.state = {
-			userUuid: "",
-			fullName: "",
-			test: "okay",
-		}
+		this.userUuid = this.props.match.params.userUuid
+		if (this.userUuid == null) {
+			this.userUuid = this.props.AuthStore.userUuid
+		} 
 	}
 
 	componentDidMount() {
-		let userUuid = this.props.match.params.userUuid
-		if (userUuid == null) {
-			userUuid = this.props.AuthStore.userUuid
-		} 
-
-		this.setState({userUuid: userUuid}, () => {
-			this.fetchProfileData() 
-		})
+		this.CPS.fetchProfile(this.userUuid)
 	}
 
-	fetchProfileData() {
-		this.props.AxiosStore.ax.get("/user/get/" + this.state.userUuid)
-		.then((resp) => {
-			this.setState({fullName: resp.data.b.fullName})
-		})
-
+	shouldComponentUpdate() {
+		if (this.CPS.status === "fetchProfile") {
+			return false
+		}
+		return true
 	}
 
 	render() {
 		return (
 			<div className="two-col-simple__form">
 				<h1>Profile</h1>
-				<p>{this.state.userUuid}</p>
-				<p>{this.state.fullName}</p>
+				<p>{this.CPS.userUuid}</p>
+				<p>{this.CPS.fullname}</p>
 
 			</div>
 

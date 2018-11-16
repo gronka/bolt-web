@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx'
-import AxiosStore from './AxiosStore'
+//import AxiosStore from './AxiosStore'
 
 import { debounce } from '../helpers'
 import MapSettingsStore from './MapSettingsStore'
@@ -62,7 +62,7 @@ class MapController {
 		var mapDiv = document.getElementById("gmapContainer")
 		this.map = new this.google.maps.Map(mapDiv, {
 			center: this.defaultCenter,
-			zoom: 11,
+			zoom: 15,
 		})
 	}
 
@@ -143,7 +143,7 @@ class MapController {
 		this.google.maps.event.addListener(this.map, 
 																			 'rightclick', 
 																			 function(e) {
-			var cursorLatLng = e.latLng;
+			//var cursorLatLng = e.latLng;
 			if (this.markerFromRightclick != null) {
 				this.markerFromRightclick.setMap(null);
 				this.markerFromRightclick = null;
@@ -261,38 +261,38 @@ class MapSettings {
 		this.unaryMarker = null
 	}
 
-	getTacsInBounds() {
-		// TODO: detect lat and lng, then guess it. For now, it's Raleigh
-		//let data = {
-			//"lat": this.userLat,
-			//"lng": this.userLng,
-		//}
-		// TODO: change this to /events/tacs or w.e it will be
-		let path = "/events"
+	//getTacsInBounds() {
+		//// TODO: detect lat and lng, then guess it. For now, it's Raleigh
+		////let data = {
+			////"lat": this.userLat,
+			////"lng": this.userLng,
+		////}
+		//// TODO: change this to /events/tacs or w.e it will be
+		//let path = "/events"
 
-		//AxiosStore.ax.get(path)
-			//.then((resp) => {
-					//this.markers[this.activeMap] = resp.data["m"]
-			//})
+		////AxiosStore.ax.get(path)
+			////.then((resp) => {
+					////this.markers[this.activeMap] = resp.data["m"]
+			////})
 
-		let tacs = [
-			{
-				"tacid": "01234",
-				"lat": -25.363,
-				"lng": 131.044,
-				"startTimeUnix": 1234908234338,
-				"endTimeUnix": 47389147231908,
-			}
+		//let tacs = [
+			//{
+				//"tacid": "01234",
+				//"lat": -25.363,
+				//"lng": 131.044,
+				//"startTimeUnix": 1234908234338,
+				//"endTimeUnix": 47389147231908,
+			//}
 
-		]
+		//]
 
-		//this.markers.events = tacs
-		var marker = new this.google.maps.Marker({
-			map: this.maps[this.name],
-			position: {lat: -25.363, lng: 131.044},
-			title: 'Hello World!'
-		});
-	}
+		////this.markers.events = tacs
+		//var marker = new this.google.maps.Marker({
+			//map: this.maps[this.name],
+			//position: {lat: -25.363, lng: 131.044},
+			//title: 'Hello World!'
+		//});
+	//}
 
 	placeTacs() {
 		

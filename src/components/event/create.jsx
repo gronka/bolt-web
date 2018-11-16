@@ -129,9 +129,10 @@ export class CustomLatLng extends Component {
 	updateLatLng = () => this.props.EventCreateForm.updateMarkerWithCustomLatLng()
 
 	fieldError(field) {
+		var error = ""
 		switch (field) {
 			case "lat":
-				var error = this.props.EventCreateForm.validateLat
+				error = this.props.EventCreateForm.validateLat
 				if (error) {
 					return (
 						<div>
@@ -142,7 +143,7 @@ export class CustomLatLng extends Component {
 				break
 
 			case "lng":
-				var error = this.props.EventCreateForm.validateLng
+				error = this.props.EventCreateForm.validateLng
 				if (error) {
 					return (
 						<div>
@@ -150,6 +151,9 @@ export class CustomLatLng extends Component {
 						</div>
 					)
 				}
+				break
+
+			default:
 				break
 
 		}

@@ -10,13 +10,16 @@ import UiStore from './stores/UiStore'
 
 import MapController from './stores/MapController'
 
+import CurrentProfileStore from './stores/CurrentProfileStore'
 import LoginForm from './stores/LoginForm'
 import RegisterForm from './stores/RegisterForm'
 
 import EventCreateForm from './stores/EventCreateForm'
+import EventListStore from './stores/EventListStore'
 
 import './styles/base.css'
 import './styles/custom-lat-lng.css'
+import './styles/eventLine.css'
 import './styles/landing.css'
 import './styles/portal.css'
 import './styles/manage.css'
@@ -33,10 +36,12 @@ const stores = {
 
 	MapController,
 
+	CurrentProfileStore,
 	LoginForm,
 	RegisterForm,
 
 	EventCreateForm,
+	EventListStore,
 }
 
 const Root = (

@@ -15,6 +15,13 @@ class AuthStore {
 		AxiosStore.remakeAxios(jwt)
 	}
 
+	@action updateEmail(p) {
+		this.email = p
+	}
+	@action updateUserUuid(p) {
+		this.userUuid = p
+	}
+
 }
 
 const singleton = new AuthStore()
