@@ -5,16 +5,22 @@ import { withRouter } from 'react-router'
 import { InputRow } from '../pieces'
 
 
-@inject('LoginForm')
+@inject('HistoryController', 'LoginForm')
 @withRouter
 export class Login extends Component {
 	constructor(props) {
 		super(props)
+		if (props.location != null && props.location.state != null) {
+			this.from = props.location.state.from.pathname
+		} else {
+			this.from = "/"
+		}
+		this.props.HistoryController.storeHistoryRef(this.props.history)
 	}
 
 	submit = () => {
-		this.props.LoginForm.submit()
-		this.props.history.push('/emptyPage')
+		// TODO: Put this call at a higher level, maybe an HOC?
+		this.props.LoginForm.submit({"from": this.from})
 	}
 
 	render() {

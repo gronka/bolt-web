@@ -6,7 +6,7 @@ export default class EmptyPage extends React.Component {
 		return(
 			<div>
 				make this a redirect later
-				maybe make a store that stores future redirects
+				maybe make a store that stores redirects
 			</div>
 		)
 	}

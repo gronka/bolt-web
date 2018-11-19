@@ -1,7 +1,7 @@
 export const conf = {
 	"bapi": "http://localhost:9090/v1",
 	//"autoLogin": true,
-	"autoLogin": false,
+	"autoLogin": true,
 	"autoLoginEmail": "asdf@asdf.com",
 	"autoLoginPassword": "asdf",
 	//"googleApiKey": "AIzaSyAyty0RNtLTQCS5mDLAel7KirMIfDlK4nI",  // new key for

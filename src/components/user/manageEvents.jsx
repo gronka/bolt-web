@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import { NavLink } from 'react-router-dom'
 
 import { conf } from '../../conf'
 import { formatUnixTimeForEventLine } from '../../helpers'
@@ -102,7 +103,9 @@ export class EventLine extends Component {
 
 					<div className="eventLine__info">
 						<div className="eventLine__info__title">
-							{this.props.event.title}
+							<NavLink exact to={"/e/" + this.props.event.eventUuid}>
+								{this.props.event.title}
+							</NavLink>
 
 						</div>
 

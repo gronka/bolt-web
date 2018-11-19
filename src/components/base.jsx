@@ -2,13 +2,16 @@ import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
+import AuthedRoute from './authedRoute'
 import Portal from './portal'
 import Landing from './landing/landing'
 
 import EventCreate from './event/create'
+import EventPage from './event/eventPage'
 
 import EmptyPage from './emptyPage'
 import Login from './user/login'
+import Logout from './user/logout'
 import ManageApp from './user/manageApp'
 import Profile from './user/profile'
 import Register from './user/register'
@@ -16,7 +19,7 @@ import Register from './user/register'
 
 /*global google*/
 
-@inject('FlashStore', 'AuthStore', 'MapController')
+@inject('AuthStore', 'FlashStore', 'MapController')
 @observer
 class BaseRouter extends React.Component {
 
@@ -48,11 +51,14 @@ class BaseRouter extends React.Component {
 
 						<Route exact path="/emptyPage" component={EmptyPage} />
 						<Route exact path="/login" component={Login} />
+						<Route exact path="/logout" component={Logout} />
 						<Route exact path="/register" component={Register} />
 
-						<Route exact path="/u/profile" component={Profile} />
-						<Route path="/u/manage" component={ManageApp} />
+						<AuthedRoute exact path="/u/profile" component={Profile} />
+						<AuthedRoute path="/u/manage" component={ManageApp} />
 						<Route path="/u/:userUuid" component={Profile} />
+
+						<Route path="/e/:eventUuid" component={EventPage} />
 
 					</Switch>
 

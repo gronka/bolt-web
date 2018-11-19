@@ -5,9 +5,9 @@ import AxiosStore from './AxiosStore'
 
 class AuthStore {
 	@observable loggedIn = false
-	@observable jwt = ""
-	@observable email = ''
-	@observable userUuid = ''
+	@observable jwt = "jwtNS"
+	@observable email = 'emailNS'
+	@observable userUuid = 'userUuidNS'
 	//@observable password = ''
 	
 	@action updateJwt(jwt) {
@@ -20,6 +20,17 @@ class AuthStore {
 	}
 	@action updateUserUuid(p) {
 		this.userUuid = p
+	}
+
+	isLoggedIn() {
+		return this.loggedIn
+	}
+
+	@action logout() {
+		this.loggedIn = false
+		this.jwt = "jwtNS"
+		this.email = 'emailNS'
+		this.userUuid = 'userUuidNS'
 	}
 
 }

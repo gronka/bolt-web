@@ -1,9 +1,9 @@
 import { computed, observable, action } from 'mobx'
-import { browserHistory } from 'react-router-dom'
 
 import { conf } from '../conf'
 import AuthStore from './AuthStore'
 import AxiosStore from './AxiosStore'
+import HistoryController from './HistoryController'
 
 
 class LoginForm {
@@ -32,21 +32,28 @@ class LoginForm {
 		return this.password
 	}
 
-	@action submit() {
+	@action submit(opts={}) {
+		let from = "/emptyPage"
+		if (opts.from != null) {
+			from = opts.from
+		}
+
 		let data = Object.assign(this)
 		let path = "/user/login"
 		AxiosStore.ax.post(path, data)
 		.then((resp) => {
 			if (resp.data.i === "login accepted") {
 				this.updateAuthStore(resp)
+				// TODO: redirect to page that user came from
+				HistoryController.redirect(from)
 			}
 		})
 	}
 
 	@action updateAuthStore(resp) {
-		AuthStore.loggedIn = true
 		var jwt = resp.data.b.jwt
 		var claims = JSON.parse(atob(jwt.split('.')[1]))
+		AuthStore.loggedIn = true
 		AuthStore.email = claims.email
 		AuthStore.userUuid = claims.userUuid
 		AuthStore.updateJwt(jwt)

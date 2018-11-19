@@ -8,12 +8,14 @@ import AxiosStore from './stores/AxiosStore'
 import FlashStore from './stores/FlashStore'
 import UiStore from './stores/UiStore'
 
+import HistoryController from './stores/HistoryController'
 import MapController from './stores/MapController'
 
 import CurrentProfileStore from './stores/CurrentProfileStore'
 import LoginForm from './stores/LoginForm'
 import RegisterForm from './stores/RegisterForm'
 
+import CurrentEventStore from './stores/CurrentEventStore'
 import EventCreateForm from './stores/EventCreateForm'
 import EventListStore from './stores/EventListStore'
 
@@ -34,12 +36,14 @@ const stores = {
 	FlashStore,
 	UiStore,
 
+	HistoryController,
 	MapController,
 
 	CurrentProfileStore,
 	LoginForm,
 	RegisterForm,
 
+	CurrentEventStore,
 	EventCreateForm,
 	EventListStore,
 }

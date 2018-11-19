@@ -57,6 +57,12 @@ export class ManageNav extends Component {
 						My Businesses
 					</NavLink>
 
+					<NavLink exact to="/logout"
+						className="manageNav__links__link"
+						activeStyle={this.activeNav}>
+						Logout
+					</NavLink>
+
 				</div>
 
 				<div className="manageNav__body">
