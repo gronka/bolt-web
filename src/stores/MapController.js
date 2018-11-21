@@ -21,17 +21,18 @@ import MapSettingsStore from './MapSettingsStore'
 	//}
 
 class MapController {
-	@observable activeMap = "activeMapNotSet"
+	@observable activeMap = "activeMapNS"
 
 	constructor(opts) {
-		this.google = "googleNotSet"
+		this.google = "googleNS"
 
-		this.map = "mapNotSet"
+		this.map = "mapNS"
 		this.listenerTypes = ["center_changed", "click"]
 
 		this.markers = []
 		// actually set in init
 		this.unaryMarker = null
+		this.deets = "deetsNS"
 
 		this.mapTypes = {
 			landing: {
@@ -40,6 +41,9 @@ class MapController {
 			},
 			eventCreate: {
 				listeners: ["create_tac_on_address_change"],
+			},
+			eventPage: {
+				listeners: [],
 			},
 		}
 
@@ -80,7 +84,7 @@ class MapController {
 		//	center: list of str designating which listeners this map uses
 		var center = opts.center || this.defaultCenter
 
-		if (this.map === "mapNotSet") {
+		if (this.map === "mapNS") {
 			this.initMap()
 		}
 
@@ -88,24 +92,24 @@ class MapController {
 			return
 		}
 
-		var settings = new MapSettings()
-		settings.type = type
-		settings.mapDivName = mapDivName
-		settings.center = center
+		this.deets = new MapDeets()
+		this.deets.type = type
+		this.deets.mapDivName = mapDivName
+		this.deets.center = center
 
 		if (type === "landing") {
 			if (MapSettingsStore.maps["landing"] == null) {
 				for (var i=0; i<this.mapTypes.landing.names.length; i++) {
-					let clone = Object.assign( Object.create( Object.getPrototypeOf(settings)), 
-																		settings)
+					let clone = Object.assign( Object.create( Object.getPrototypeOf(this.deets)), 
+																		this.deets)
 					clone.name = this.mapTypes.landing.names[i]
 					MapSettingsStore.maps[clone.name] = clone
 
 				}
 			}
 		} else {
-				settings.name = name
-				MapSettingsStore.maps[name] = settings
+				this.deets.name = name
+				MapSettingsStore.maps[name] = this.deets
 		}
 
 		//this.resetMap()
@@ -134,7 +138,7 @@ class MapController {
 																			 debounce(function() {
 			if ( true ) {
 				// TODO: replace true with a test if freeze box is not checked
-				this.map.getTacsInBounds();
+				//this.map.getTacsInBounds();
 			}
 		}, 400));
 	}
@@ -164,7 +168,8 @@ class MapController {
 	resetMap() {
 		this.clearAllListeners()
 		MapSettingsStore.maps[this.activeMap].reset()
-		this.loadMapFromSettings(this.activeMap)
+		this.loadMapFromDeets(this.activeMap)
+		this.unaryMarker.setMap(null)
 	}
 
 	clearAllListeners() {
@@ -175,13 +180,17 @@ class MapController {
 
 	@action changeMap(name) {
 		// TODO TODO: back up map settings here, stop storing in other places
-		if (this.google !== "googleNotSet") {
+		//currentMap = this.MapSettingsStore.maps[name]
+		//currentMap.lat = this.lat
+		//currentMap.lng = this.lng
+
+		if (this.google !== "googleNS") {
 			//if (this.activeMap !== name) {
 				this.activeMap = name
 				this.resetMap()
 				if (MapSettingsStore.maps[name] != null) {
 					//alert("map found")
-					this.loadMapFromSettings(name)
+					this.loadMapFromDeets(name)
 				} else {
 					//alert("map missing from store")
 				}
@@ -192,10 +201,11 @@ class MapController {
 	//
 	// Functions for loading a map
 	//
-	loadMapFromSettings(name) {
-		var stg = MapSettingsStore.maps[name]
+	loadMapFromDeets(name) {
+		// TODO: load from deets instead
+		this.deets = MapSettingsStore.maps[name]
 
-		this.activeMap = stg.name
+		this.activeMap = this.deets.name
 
 		var mapTargetDiv = document.getElementsByClassName(stg.mapDivName)[0]
 		var mapContainer = this.map.getDiv()
@@ -230,6 +240,12 @@ class MapController {
 		this.map.panTo({"lat": lat, "lng": lng})
 	}
 
+	panToMarker(p) {
+		var lat = parseFloat(p.lat)
+		var lng = parseFloat(p.lng)
+		this.map.panTo({"lat": lat, "lng": lng})
+	}
+
 	updateUnaryMarker(p) {
 		var lat = parseFloat(p.lat)
 		var lng = parseFloat(p.lng)
@@ -242,17 +258,16 @@ class MapController {
 	}
 
 
-
 }
 
 
-class MapSettings {
+class MapDeets {
 	name = ""
-	userLat = 35.7796
-	userLng = -78.6382
-	type = "typeNotSet"
-	mapDivName = "mapDivNameNotSet"
-	map = "mapNotSet"
+	lat = 35.7796
+	lng = -78.6382
+	type = "typeNS"
+	mapDivName = "mapDivNameNS"
+	map = "mapNS"
 	markers = []
 	unaryMarker = null
 
@@ -261,42 +276,15 @@ class MapSettings {
 		this.unaryMarker = null
 	}
 
-	//getTacsInBounds() {
-		//// TODO: detect lat and lng, then guess it. For now, it's Raleigh
-		////let data = {
-			////"lat": this.userLat,
-			////"lng": this.userLng,
-		////}
-		//// TODO: change this to /events/tacs or w.e it will be
-		//let path = "/events"
-
-		////AxiosStore.ax.get(path)
-			////.then((resp) => {
-					////this.markers[this.activeMap] = resp.data["m"]
-			////})
-
-		//let tacs = [
-			//{
-				//"tacid": "01234",
-				//"lat": -25.363,
-				//"lng": 131.044,
-				//"startTimeUnix": 1234908234338,
-				//"endTimeUnix": 47389147231908,
-			//}
-
-		//]
-
-		////this.markers.events = tacs
-		//var marker = new this.google.maps.Marker({
-			//map: this.maps[this.name],
-			//position: {lat: -25.363, lng: 131.044},
-			//title: 'Hello World!'
-		//});
-	//}
 
 	placeTacs() {
 		
 	}
+
+}
+
+
+class GMapController {
 
 }
 

@@ -191,14 +191,18 @@ class EventCreateForm {
 	}
 
 	submit() {
+		// getTimzezoneOffset() returns offset in minutes
+		var tzOffset = this.startDate.getTimezoneOffset() * 60 * 1000
+
 		var data = {
 			"title": this.title,
 			"venue": this.venue,
 			"lat": parseFloat(this.lat),
 			"lng": parseFloat(this.lng),
 			"address": this.address,
-			"startTimeUnix": (this.startDate.getTime() / 1000),
-			"endTimeUnix": (this.endDate.getTime() / 1000),
+			"startTimeUnix": this.startDate.UTC(),
+			"endTimeUnix": this.endDate.UTC(),
+			"tzOffsetUnix": tzOffset,
 			"description": this.description,
 			"quickInfo": this.quickInfo,
 			"phone": this.phone,

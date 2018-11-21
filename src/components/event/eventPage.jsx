@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 
+import { getThreeLetterMonth } from '../../lib/dateHelpers'
 import GoogleMap from '../googleMap'
 
 
@@ -13,7 +14,7 @@ class EventPage extends Component {
 		this.eventUuid = props.match.params.eventUuid
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.CES.fetchEvent(this.eventUuid)
 	}
 
@@ -21,26 +22,28 @@ class EventPage extends Component {
 		return (
 			<div className="two-col-simple__form"
 				id="form-register">
-				<h1>Register to follow events, or plan your own!</h1>
+				{this.CES.loaded &&
+				<div>
 
-				<p>
-					title
-				</p>
+				<h1>
+					{this.CES.title}
+				</h1>
 
-				<p>
-					title
-				</p>
+					{getThreeLetterMonth(this.CES.startDate)}
+					<br />
+					{this.CES.startDate.getDate()}
+					<br />
+					{this.CES.address}
+					<br />
 
-				<p>
-					title
-				</p>
+					{this.CES.description}
+				</div>
+				
+				}
 
-
-
-				<GoogleMap name="eventCreate"
-					type="eventCreate"
-					mapDivName="eventCreateMap"
-					linkAddress="eventCreateMapAddress"
+				<GoogleMap name="eventPage"
+					type="eventPage"
+					mapDivName="eventPageMap"
 					height="400px"
 					width="100%"
 					/>

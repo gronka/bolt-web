@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-//import { inject, observer } from 'mobx-react'
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 
 
 @inject('AuthStore', 'AxiosStore', 'CurrentProfileStore')
+@observer
 export class Profile extends Component {
 
 	constructor(props) {
