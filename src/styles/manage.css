@@ -14,6 +14,11 @@
 .manageNav__links__link {
 	flex-grow: 2;
 	text-align: center;
+	font-size: 16px;
+	margin-top: 12px;
+	margin-bottom: 12px;
+	padding-top: 6px;
+	padding-bottom: 8px;
 }
 
 .manageNav__body {

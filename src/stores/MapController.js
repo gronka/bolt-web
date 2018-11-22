@@ -1,39 +1,22 @@
-import { observable, action } from 'mobx'
 //import AxiosStore from './AxiosStore'
-
 import { debounce } from '../helpers'
 import MapSettingsStore from './MapSettingsStore'
 
 
-	//loadedMarkers = {
-		//"events": [
-			//{
-				//"tacid": "01234",
-				//"lat": -25.363,
-				//"lng": 131.044,
-				//"startTimeUnix": 1234908234338,
-				//"endTimeUnix": 47389147231908,
-			//},
+var defaultLat = -25.363
+var defaultLng = 131.044
 
-		//],
-		//"food": {},
-		//"open": {},
-	//}
 
 // Don't store state in the map controller - store state in deets, and make
 // changes to deets directly
 class MapController {
-	@observable activeMap = "activeMapNS"
-
 	constructor(opts) {
 		this.google = "googleNS"
-
 		this.map = "mapNS"
-		this.listenerTypes = ["center_changed", "click"]
 
-		this.markers = []
 		this.deets = MapSettingsStore.deets["events"]
 
+		this.listenerTypes = ["center_changed", "click"]
 		this.mapTypes = {
 			landing: {
 				listeners: ["center_changed_get_tacs"],
@@ -57,7 +40,7 @@ class MapController {
 	initMap(deets={}) {
 		var mapDiv = document.getElementById("gmapContainer")
 		this.map = new this.google.maps.Map(mapDiv, {
-			center: {lat: -25.363, lng: 131.044},
+			center: {lat: defaultLat, lng: defaultLng},
 			zoom: 15,
 		})
 	}
@@ -73,7 +56,7 @@ class MapController {
 
 		if (deets.center == null) {
 			// default center
-			deets.center = {lat: -25.363, lng: 131.044}
+			deets.center = {lat: defaultLat, lng: defaultLng}
 		}
 
 		MapSettingsStore.deets[deets.name] = deets
@@ -124,7 +107,7 @@ class MapController {
 		}
 	}
 
-	@action changeMap(name) {
+	changeMap(name) {
 		if (this.google !== "googleNS") {
 			this.resetMap()
 			

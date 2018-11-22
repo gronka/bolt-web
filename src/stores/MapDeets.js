@@ -1,6 +1,5 @@
 // Avoid performing logic in deets; use the map controller for logic, and deets
 // for state
-// Initialize with injection maybe...
 export class MapDeets {
 
 	//	name: key for storage and lookup
@@ -22,10 +21,6 @@ export class MapDeets {
 		this.name = opts.name
 		this.type = opts.type
 		this.mapDivName = opts.mapDivName
-	}
-
-	reset() {
-		this.markers = []
 	}
 
 }
