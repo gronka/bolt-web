@@ -56,14 +56,14 @@ class EventCreateForm {
 		this.setAddress(loc.address)
 
 		MapController.panToLatLng(loc.lat, loc.lng)
-		MapController.updateUnaryMarker({"lat": loc.lat,
-																		"lng": loc.lng})
+		MapController.updateMarkersByType("unary", 
+																			{"lat": loc.lat, "lng": loc.lng})
 	}
 
 	updateMarkerWithCustomLatLng() {
 		MapController.panToLatLng(this.lat, this.lng)
-		MapController.updateUnaryMarker({"lat": this.lat,
-																		"lng": this.lng})
+		MapController.updateMarkersByType("unary", 
+																			{"lat": this.lat, "lng": this.lng})
 	}
 
 	@computed get locEqualsGoogleLoc() {

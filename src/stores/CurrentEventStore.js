@@ -54,12 +54,12 @@ class CurrentEventStore {
 		this.tzName = data.tzName
 		this.loaded = true
 
-		var marker = {
+		var point = {
 			"lat": this.lat,
 			"lng": this.lng,
 		}
-		MapController.updateUnaryMarker(marker)
-		MapController.panToMarker(marker)
+		MapController.updateMarkersByType("unary", point)
+		MapController.panToPoint(point)
 	}
 
 }

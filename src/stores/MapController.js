@@ -20,6 +20,8 @@ import MapSettingsStore from './MapSettingsStore'
 		//"open": {},
 	//}
 
+// Don't store state in the map controller - store state in deets, and make
+// changes to deets directly
 class MapController {
 	@observable activeMap = "activeMapNS"
 
@@ -30,9 +32,7 @@ class MapController {
 		this.listenerTypes = ["center_changed", "click"]
 
 		this.markers = []
-		// actually set in init
-		this.unaryMarker = null
-		this.deets = "deetsNS"
+		this.deets = MapSettingsStore.deets["events"]
 
 		this.mapTypes = {
 			landing: {
@@ -40,20 +40,13 @@ class MapController {
 				names: ["landing", "events", "food", "open"],
 			},
 			eventCreate: {
-				listeners: ["create_tac_on_address_change"],
+				listeners: ["create_tac_on_address_change", 
+					"create_tac_on_right_click"],
 			},
 			eventPage: {
 				listeners: [],
 			},
 		}
-
-		// for debugging
-		this.defaultCenter = {
-			lat: -25.363,
-			lng: 131.044,
-		}
-
-
 
 	}
 
@@ -61,75 +54,29 @@ class MapController {
 		this.google = google
 	}
 
-	initMap(opts) {
-		this.unaryMarker = this.returnEmptyMarker()
+	initMap(deets={}) {
 		var mapDiv = document.getElementById("gmapContainer")
 		this.map = new this.google.maps.Map(mapDiv, {
-			center: this.defaultCenter,
+			center: {lat: -25.363, lng: 131.044},
 			zoom: 15,
 		})
 	}
 
-	createMap(opts) {
-		// opts: 
-		//	name: key for storage and lookup
-		var name = opts.name
-
-		//	mapDivName: dom element ref for map rendering
-		var mapDivName = opts.mapDivName
-
-		//	type: type of map for loading other settings
-		var type = opts.type
-
-		//	center: list of str designating which listeners this map uses
-		var center = opts.center || this.defaultCenter
-
+	createMap(deets) {
 		if (this.map === "mapNS") {
 			this.initMap()
 		}
-
-		if (MapSettingsStore.maps[name] != null) {
+		if (MapSettingsStore.deets[deets.name] != null) {
+			this.deets = MapSettingsStore.deets[deets.name]
 			return
 		}
 
-		this.deets = new MapDeets()
-		this.deets.type = type
-		this.deets.mapDivName = mapDivName
-		this.deets.center = center
-
-		if (type === "landing") {
-			if (MapSettingsStore.maps["landing"] == null) {
-				for (var i=0; i<this.mapTypes.landing.names.length; i++) {
-					let clone = Object.assign( Object.create( Object.getPrototypeOf(this.deets)), 
-																		this.deets)
-					clone.name = this.mapTypes.landing.names[i]
-					MapSettingsStore.maps[clone.name] = clone
-
-				}
-			}
-		} else {
-				this.deets.name = name
-				MapSettingsStore.maps[name] = this.deets
+		if (deets.center == null) {
+			// default center
+			deets.center = {lat: -25.363, lng: 131.044}
 		}
 
-		//this.resetMap()
-		//this.loadMapFromSettings(name)
-
-	}
-
-	returnEmptyMarker() {
-		var emptyMarker = new this.google.maps.Marker({
-			map: null,
-			position: {lat: 0, lng: 0},
-			title: 'emptyMarker'
-		})
-		return emptyMarker
-	}
-
-	propagateMapType(type, settings) {
-		if (type === "landing") {
-
-		}
+		MapSettingsStore.deets[deets.name] = deets
 	}
 
 	addCenterChangedGetTacsListener() {
@@ -144,14 +91,15 @@ class MapController {
 	}
 
 	addCreateTacOnRightClickListener() {
-		this.google.maps.event.addListener(this.map, 
-																			 'rightclick', 
-																			 function(e) {
-			//var cursorLatLng = e.latLng;
-			if (this.markerFromRightclick != null) {
-				this.markerFromRightclick.setMap(null);
-				this.markerFromRightclick = null;
-			}
+		this.google.maps.event.addListener(
+			this.map, 
+			'rightclick', 
+			function(e) {
+				//var cursorLatLng = e.latLng;
+				if (this.markerFromRightclick != null) {
+					this.markerFromRightclick.setMap(null);
+					this.markerFromRightclick = null;
+				}
 			//markerFromRightclick = new google.maps.Marker({
 				//position: cursorLatLng,
 				//icon: inactiveMarkerIcon,
@@ -165,56 +113,52 @@ class MapController {
 	//
 	// Functions for clearing map
 	//
-	resetMap() {
-		this.clearAllListeners()
-		MapSettingsStore.maps[this.activeMap].reset()
-		this.loadMapFromDeets(this.activeMap)
-		this.unaryMarker.setMap(null)
+	resetMap(name) {
+		this.deleteAllListeners()
+		this.deleteMarkers()
 	}
 
-	clearAllListeners() {
+	deleteAllListeners() {
 		for (var i=0; i < this.listenerTypes.length; i++) {
 			this.google.maps.event.clearListeners(this.map, this.listenerTypes[i])
 		}
 	}
 
 	@action changeMap(name) {
-		// TODO TODO: back up map settings here, stop storing in other places
-		//currentMap = this.MapSettingsStore.maps[name]
-		//currentMap.lat = this.lat
-		//currentMap.lng = this.lng
-
 		if (this.google !== "googleNS") {
-			//if (this.activeMap !== name) {
-				this.activeMap = name
-				this.resetMap()
-				if (MapSettingsStore.maps[name] != null) {
-					//alert("map found")
-					this.loadMapFromDeets(name)
-				} else {
-					//alert("map missing from store")
-				}
-			//}
+			this.resetMap()
+			
+			if (MapSettingsStore.deets[name] != null) {
+				//alert("map found")
+				this.loadMapFromDeets(name)
+			} else {
+				alert("map missing from store")
+			}
 		}
+
 	}
 
 	//
 	// Functions for loading a map
 	//
 	loadMapFromDeets(name) {
-		// TODO: load from deets instead
-		this.deets = MapSettingsStore.maps[name]
+		this.deets = MapSettingsStore.deets[name]
 
-		this.activeMap = this.deets.name
-
-		var mapTargetDiv = document.getElementsByClassName(stg.mapDivName)[0]
+		var mapTargetDiv = document.getElementsByClassName(this.deets.mapDivName)[0]
 		var mapContainer = this.map.getDiv()
 
 		//mapContainer.parentNode.removeChild(mapContainer)
 		mapTargetDiv.appendChild(mapContainer)
 
+		if (this.deets.type === "eventCreate") {
+			this.initUnaryMarker()
+		}
+		if (this.deets.type === "eventPage") {
+			this.initUnaryMarker()
+		}
+
 		//	listeners: list of str designating which listeners this map uses
-		var listeners = this.mapTypes[stg.type]["listeners"]
+		var listeners = this.mapTypes[this.deets.type]["listeners"]
 
 		for (var i=0; i < listeners.length; i++) {
 			var listener = listeners[i]
@@ -240,52 +184,82 @@ class MapController {
 		this.map.panTo({"lat": lat, "lng": lng})
 	}
 
-	panToMarker(p) {
+	panToPoint(p) {
 		var lat = parseFloat(p.lat)
 		var lng = parseFloat(p.lng)
 		this.map.panTo({"lat": lat, "lng": lng})
 	}
 
-	updateUnaryMarker(p) {
-		var lat = parseFloat(p.lat)
-		var lng = parseFloat(p.lng)
+	//
+	// Functions for marker actions
+	//
+	updateMarkersByType(type, point) {
+		var lat = parseFloat(point.lat)
+		var lng = parseFloat(point.lng)
 
-		this.unaryMarker.setMap(null)
-		this.unaryMarker = new this.google.maps.Marker({
-			map: this.map,
-			position: {lat: lat, lng: lng},
+		var markers = this.getMarkersOfType(type)
+		for (var i=0; i<markers.length; i++) {
+			markers[i].gm.setMap(null)
+			markers[i].gm = new this.google.maps.Marker({
+				map: this.map,
+				position: {lat: lat, lng: lng},
+			})
+		}
+	}
+
+	getMarkersOfType(type) {
+		var markers = []
+		for (var i=0; i<this.deets.markers.length; i++) {
+			if (this.deets.markers[i].type === type) {
+				markers.push(this.deets.markers[i])
+			}
+		}
+		return markers
+	}
+
+	deleteMarkers() {
+		var markers = this.deets.markers
+		for (var i=0; i<markers.length; i++) {
+			markers[i].gm.setMap(null)
+		}
+		this.deets.markers = []
+	}
+
+	hideMarkers() {
+		var markers = this.deets.markers
+		for (var i=0; i<markers.length; i++) {
+			markers[i].gm.setMap(null)
+		}
+	}
+
+	initUnaryMarker() {
+		this.deets.markers.push(new Marker({
+			"type": "unary",
+			"gm": this.returnEmptyMarker(),
+		}))
+
+	}
+
+	returnEmptyMarker() {
+		var emptyMarker = new this.google.maps.Marker({
+			map: null,
+			position: {lat: 0, lng: 0},
+			title: 'emptyMarker'
 		})
+		return emptyMarker
 	}
-
 
 }
 
 
-class MapDeets {
-	name = ""
-	lat = 35.7796
-	lng = -78.6382
+class Marker {
 	type = "typeNS"
-	mapDivName = "mapDivNameNS"
-	map = "mapNS"
-	markers = []
-	unaryMarker = null
+	gm = "gmNS"
 
-	reset() {
-		this.markers = []
-		this.unaryMarker = null
+	constructor(opts) {
+		this.type = opts.type
+		this.gm = opts.gm
 	}
-
-
-	placeTacs() {
-		
-	}
-
-}
-
-
-class GMapController {
-
 }
 
 

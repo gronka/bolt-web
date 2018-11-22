@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { inject } from 'mobx-react'
 
-import { getActiveMapName } from '../../helpers'
+//import { getActiveMapName } from '../../helpers'
 import EventsLandingFilters from './eventsLandingFilters'
 import FoodLandingFilters from './foodLandingFilters'
 import OpenLandingFilters from './openLandingFilters'
@@ -10,10 +10,10 @@ import OpenLandingFilters from './openLandingFilters'
 
 @inject('MapController')
 class Landing extends React.Component {
-	constructor(props) {
-		super(props)
-		this.activeMapName = getActiveMapName()
-	}
+	//constructor(props) {
+		//super(props)
+		//this.activeMapName = getActiveMapName()
+	//}
 
 	// TODO: determine if this is needed or not
 	//componentDidMount() {
@@ -30,10 +30,10 @@ class Landing extends React.Component {
 		//clearInterval(this.assureMapInterval)
 	//}
 	
-	componentDidUpdate() {
-		this.activeMapName = getActiveMapName()
-		this.props.MapController.changeMap(this.activeMapName)
-	}
+	//componentDidUpdate() {
+		//this.activeMapName = getActiveMapName()
+		//this.props.MapController.changeMap(this.activeMapName)
+	//}
 
 	render() {
 		return (

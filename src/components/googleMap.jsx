@@ -1,6 +1,8 @@
 import React from 'react'
 import { inject } from 'mobx-react'
 
+import {MapDeets} from '../stores/MapDeets'
+
 
 @inject ('MapController')
 //@observer
@@ -24,14 +26,16 @@ export default class GoogleMap extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.MapController.createMap({
-			name: this.name,
-			type: this.type,
-			mapDivName: this.mapDivName,
+		var deets = new MapDeets({
+			"name": this.name,
+			"type": this.type,
+			"mapDivName": this.mapDivName,
 		})
 
+		this.props.MapController.createMap(deets)
+
 		//alert(this.name)
-		this.props.MapController.changeMap(this.name)
+		this.props.MapController.changeMap(deets.name)
 	}
 
 	render() {
