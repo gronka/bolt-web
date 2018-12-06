@@ -1,11 +1,21 @@
-import { observable, action } from 'mobx'
+import { computed, observable, action } from 'mobx'
 import AxiosStore from './AxiosStore'
+
+import EventListCache from './EventListCache'
 
 
 class CurrentProfileStore {
 	@observable userUuid = "userUuidNS"
 	@observable fullname = "fullnameNS"
 	status = "stateNotSet"
+
+	getKey(name) {
+		return EventListCache.makeKey(this.userUuid, name)
+	}
+
+	@computed get sharedEventListKey() {
+		return EventListCache.makeKey(this.userUuid, "shared")
+	}
 
 	fetchProfile(userUuid) {
 		this.status = "fetchProfile"
@@ -23,6 +33,7 @@ class CurrentProfileStore {
 	@action unpackProfileFromApi(data) {
 		this.userUuid = data.userUuid
 		this.fullname = data.fullname
+		EventListCache.setEventList(this.sharedEventListKey, data.sharedEventUuids)
 	}
 
 }

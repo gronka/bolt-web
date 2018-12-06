@@ -1,0 +1,33 @@
+.profile__header {
+	flex-basis: 100%;
+	margin-bottom: 24px;
+	height: 180px;
+}
+
+.profile__container {
+	display: flex;
+	flex-flow: column;
+}
+
+.profile__leftCol {
+	flex-basis: 500px;
+	margin-right: 20px;
+}
+
+.profile__rightCol {
+	flex-basis: 280px;
+}
+
+.profile__body {
+	display: flex;
+	flex-flow: row;
+}
+
+.profile__row {
+	width: 100%;
+	margin-bottom: 18px;
+}
+
+.profile__name {
+	font-size: 24px;
+}

@@ -212,7 +212,7 @@ class EventCreateForm {
 		var error = this.validateSubmit(data)
 		FlashStore.addFlash(error, "error")
 
-		AxiosStore.ax.post("/event/create", data)
+		AxiosStore.ax.post("/events/create", data)
 	}
 }
 

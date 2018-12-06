@@ -15,9 +15,12 @@ import CurrentProfileStore from './stores/CurrentProfileStore'
 import LoginForm from './stores/LoginForm'
 import RegisterForm from './stores/RegisterForm'
 
+import EventCache from './stores/EventCache'
+import EventListCache from './stores/EventListCache'
 import CurrentEventStore from './stores/CurrentEventStore'
 import EventCreateForm from './stores/EventCreateForm'
-import EventListStore from './stores/EventListStore'
+import CurrentEventList from './stores/CurrentEventList'
+import CurrentSlatedEventList from './stores/CurrentSlatedEventList'
 
 import './styles/base.css'
 import './styles/custom-lat-lng.css'
@@ -28,6 +31,7 @@ import './styles/manage.css'
 import './styles/two-col-simple.css'
 import './styles/custom-lat-lng.css'
 import './styles/markers.css'
+import './styles/profile.css'
 import 'flatpickr/dist/themes/material_green.css'
 
 const stores = {
@@ -43,9 +47,12 @@ const stores = {
 	LoginForm,
 	RegisterForm,
 
+	EventCache,
+	EventListCache,
 	CurrentEventStore,
 	EventCreateForm,
-	EventListStore,
+	CurrentEventList,
+	CurrentSlatedEventList,
 }
 
 const Root = (

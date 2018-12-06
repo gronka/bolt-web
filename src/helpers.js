@@ -75,3 +75,31 @@ export function round(num, digits, decimal=true) {
 	var shiftedRounded = Math.round(shifted)
 	return shiftedRounded / place
 }
+
+
+export function comingFromPath(props, useWindow=false) {
+	var fromPath = "/"
+	if (!useWindow) {
+		if (props.location != null && props.location.state != null) {
+			fromPath = props.location.state.from.pathname
+		} 
+		return fromPath
+	} 
+
+	var loc = window.location.href.split("/")
+	loc.shift()
+	loc.shift()
+	loc.shift()
+	fromPath = loc.join("/")
+	return fromPath
+}
+
+export function storeFromStoreName(props, storeName) {
+		if (storeName === "CurrentSharedEventList") {
+			return props.CurrentSharedEventList
+		} else if (storeName === "CurrentSlatedEventList") {
+			return props.CurrentSlatedEventList
+		} else if (storeName === "CurrentEventList") {
+			return props.CurrentEventList
+		}
+}

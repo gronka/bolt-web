@@ -4,14 +4,17 @@ import { conf } from '../conf'
 import AuthStore from './AuthStore'
 import AxiosStore from './AxiosStore'
 import HistoryController from './HistoryController'
+import CurrentProfileStore from './CurrentProfileStore'
+import { comingFromPath } from '../helpers'
 
 
 class LoginForm {
 	constructor() {
 		if (conf["autoLogin"]) {
+			var fromPath = comingFromPath({}, true)
 			this.email = conf["autoLoginEmail"]
 			this.password = conf["autoLoginPassword"]
-			this.submit()
+			this.submit({"from": fromPath})
 		}
 	}
 
@@ -44,7 +47,6 @@ class LoginForm {
 		.then((resp) => {
 			if (resp.data.i === "login accepted") {
 				this.updateAuthStore(resp)
-				// TODO: redirect to page that user came from
 				HistoryController.redirect(from)
 			}
 		})
@@ -57,6 +59,7 @@ class LoginForm {
 		AuthStore.email = claims.email
 		AuthStore.userUuid = claims.userUuid
 		AuthStore.updateJwt(jwt)
+		CurrentProfileStore.fetchProfile(claims.userUuid)
 	}
 }
 

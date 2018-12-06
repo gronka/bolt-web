@@ -3,6 +3,7 @@ import { inject } from 'mobx-react'
 import { withRouter } from 'react-router'
 
 import { InputRow } from '../pieces'
+import { comingFromPath } from '../../helpers'
 
 
 @inject('HistoryController', 'LoginForm')
@@ -10,11 +11,7 @@ import { InputRow } from '../pieces'
 export class Login extends Component {
 	constructor(props) {
 		super(props)
-		if (props.location != null && props.location.state != null) {
-			this.from = props.location.state.from.pathname
-		} else {
-			this.from = "/"
-		}
+		this.from = comingFromPath(props)
 		this.props.HistoryController.storeHistoryRef(this.props.history)
 	}
 

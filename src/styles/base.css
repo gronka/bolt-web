@@ -39,3 +39,9 @@ html, body, #root {
 .flashmsg__error {
 	background: red;
 }
+
+.px800Col {
+    margin: 0 auto;
+    padding: 0;
+    width: 800px;
+}

@@ -5,6 +5,7 @@ import MapController from './MapController'
 
 
 class CurrentEventStore {
+	// TODO: load the Event class from EvenchCache.js? Wrap that instead?
 	@observable eventUuid = "eventUuidNS"
 	@observable userUuid = "userUuidNS"
 	@observable title = "titleNS"
@@ -26,10 +27,9 @@ class CurrentEventStore {
 	fetchEvent(eventUuid) {
 		this.loaded = false
 		this.status = "fetchEvent"
-		AxiosStore.ax.get("/event/get/" + eventUuid)
+		AxiosStore.ax.get("/events/get/" + eventUuid)
 		.then((resp) => {
-			this.unpackEventFromApi(resp.data.b)
-			this.setStatus("ready")
+			this.loadEventFromApi(resp)
 		})
 	}
 
@@ -37,7 +37,8 @@ class CurrentEventStore {
 		this.status = status
 	}
 
-	@action unpackEventFromApi(data) {
+	@action loadEventFromApi(resp) {
+		var data = resp.data.b
 		this.eventUuid = data.eventUuid
 		this.userUuid = data.userUuid
 		this.title = data.title
@@ -60,6 +61,8 @@ class CurrentEventStore {
 		}
 		MapController.updateMarkersByType("unary", point)
 		MapController.panToPoint(point)
+
+		this.setStatus("ready")
 	}
 
 }

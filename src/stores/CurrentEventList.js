@@ -6,6 +6,7 @@ import AxiosStore from './AxiosStore'
 class EventListStore {
 	// TODO: cache different events that are pulled
 	@observable events = []
+	@observable editMode = false
 
 	@action updateEvents(events) {
 		this.events = JSON.parse(JSON.stringify(events))
