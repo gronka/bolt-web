@@ -93,13 +93,3 @@ export function comingFromPath(props, useWindow=false) {
 	fromPath = loc.join("/")
 	return fromPath
 }
-
-export function storeFromStoreName(props, storeName) {
-		if (storeName === "CurrentSharedEventList") {
-			return props.CurrentSharedEventList
-		} else if (storeName === "CurrentSlatedEventList") {
-			return props.CurrentSlatedEventList
-		} else if (storeName === "CurrentEventList") {
-			return props.CurrentEventList
-		}
-}

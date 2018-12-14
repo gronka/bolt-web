@@ -28,19 +28,19 @@ export class Profile extends Component {
 		this.CPS.fetchProfile(this.userUuid)
 	}
 
-	//shouldComponentUpdate() {
-		//if (this.CPS.status === "fetchProfile") {
-			//return false
-		//}
-		//return true
-	//}
-
 	renderHeader() {
 		// TODO: hide header if no content for it
 	}
 
 	renderSharedEvents() {
 		// TODO: hide header if no content for it
+	}
+
+	editText = e => {
+		var el = e.target.closest(".valuewrap")
+		debugger
+		//var val = el.innerHTML
+		//alert(val)
 	}
 
 	render() {
@@ -67,7 +67,14 @@ export class Profile extends Component {
 								name="shared"
 								canEdit={this.isCurrentUser}
 								/>
+						</div>
 
+						<div className="profile__row">
+							<EventList 
+								title="Slated Events"
+								name="slated"
+								canEdit={this.isCurrentUser}
+								/>
 						</div>
 
 					</div>
@@ -78,7 +85,12 @@ export class Profile extends Component {
 						</div>
 
 						<div className="profile__row">
-							<a className="profile__name">{this.CPS.fullname}</a>
+							<span>Follow</span>
+							<span className="profile__name valuewrap">{this.CPS.fullname}
+							{this.isCurrentUser &&
+								<div className="editable" onClick={this.editText}>edit</div>
+							}
+						</span>
 							<span>Follow</span>
 						</div>
 

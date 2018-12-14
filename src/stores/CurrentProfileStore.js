@@ -17,6 +17,10 @@ class CurrentProfileStore {
 		return EventListCache.makeKey(this.userUuid, "shared")
 	}
 
+	@computed get slatedEventListKey() {
+		return EventListCache.makeKey(this.userUuid, "slated")
+	}
+
 	fetchProfile(userUuid) {
 		this.status = "fetchProfile"
 		AxiosStore.ax.get("/user/get/" + userUuid)
@@ -34,6 +38,7 @@ class CurrentProfileStore {
 		this.userUuid = data.userUuid
 		this.fullname = data.fullname
 		EventListCache.setEventList(this.sharedEventListKey, data.sharedEventUuids)
+		EventListCache.setEventList(this.slatedEventListKey, data.slatedEventUuids)
 	}
 
 }

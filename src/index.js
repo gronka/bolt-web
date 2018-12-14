@@ -19,8 +19,6 @@ import EventCache from './stores/EventCache'
 import EventListCache from './stores/EventListCache'
 import CurrentEventStore from './stores/CurrentEventStore'
 import EventCreateForm from './stores/EventCreateForm'
-import CurrentEventList from './stores/CurrentEventList'
-import CurrentSlatedEventList from './stores/CurrentSlatedEventList'
 
 import './styles/base.css'
 import './styles/custom-lat-lng.css'
@@ -51,8 +49,6 @@ const stores = {
 	EventListCache,
 	CurrentEventStore,
 	EventCreateForm,
-	CurrentEventList,
-	CurrentSlatedEventList,
 }
 
 const Root = (
