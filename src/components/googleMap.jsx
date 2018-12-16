@@ -17,6 +17,10 @@ export default class GoogleMap extends React.Component {
 		this.mapDivName = props.mapDivName
 		this.linkAddress = "eventCreateMapAddress"
 
+		// Default to Raleigh
+		this.lat = 35.7796
+		this.lng = -78.6382
+
 		this.height = props.height || "100%"
 		this.width = props.width || "100%"
 	}
@@ -34,8 +38,17 @@ export default class GoogleMap extends React.Component {
 
 		this.props.MapController.createMap(deets)
 
-		//alert(this.name)
 		this.props.MapController.changeMap(deets.name)
+
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				pos => {
+					this.props.MapController.panToLatLng(pos.coords.latitude, pos.coords.longitude)
+				}
+			)
+		} else {
+			// TODO: is there a solution if geolocation is not supported or denied?
+		}
 	}
 
 	render() {
