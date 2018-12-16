@@ -36,13 +36,6 @@ export class Profile extends Component {
 		// TODO: hide header if no content for it
 	}
 
-	editText = e => {
-		var el = e.target.closest(".valuewrap")
-		debugger
-		//var val = el.innerHTML
-		//alert(val)
-	}
-
 	render() {
 		return (
 			<div className="px800Col profile__container">
@@ -85,17 +78,20 @@ export class Profile extends Component {
 						</div>
 
 						<div className="profile__row">
-							<span>Follow</span>
-							<span className="profile__name valuewrap">{this.CPS.fullname}
-							{this.isCurrentUser &&
-								<div className="editable" onClick={this.editText}>edit</div>
-							}
-						</span>
+							<EditableText field="fullname"
+								rows="1"
+								store="CPS"
+								isCurrentUser={this.isCurrentUser}
+							/>
 							<span>Follow</span>
 						</div>
 
 						<div className="profile__row">
-							<span>About me</span>
+							<EditableText field="about"
+								rows="5"
+								store="CPS"
+								isCurrentUser={this.isCurrentUser}
+							/>
 						</div>
 
 						<div className="profile__row">
@@ -112,9 +108,7 @@ export class Profile extends Component {
 
 					</div>
 
-
 				</div>
-
 
 			</div>
 
@@ -122,6 +116,69 @@ export class Profile extends Component {
 	}
 
 }
+
+
+@inject('CurrentProfileStore')
+@observer
+export class EditableText extends Component {
+	constructor(props) {
+		super(props)
+		if (props.store === "CPS") {
+			this.store = props.CurrentProfileStore
+		}
+
+		this.field = props.field
+		this.rows = props.rows
+		this.isCurrentUser = props.isCurrentUser
+
+		this.state = { editMode: false }
+	}
+
+	getValue() {
+		return this.store[this.field]
+	}
+
+	setValue = e => {
+		this.store[this.field] = e.target.value
+	}
+
+	enableEditMode = () => {
+		this.setState({ editMode: true })
+	}
+
+	disableEditModeAndSave = () => {
+		this.setState({ editMode: false })
+		this.store.saveFieldToDb(this.field, this.getValue())
+	}
+
+	render() {
+		const classes = "valuewrap " + this.store + "__" + this.field
+		return (
+			<div className="valuewrap">
+				{!this.state.editMode ?
+					<div className="valuewrap">
+						{this.isCurrentUser &&
+							<div className="editable" onClick={this.enableEditMode}>edit</div>
+						}
+						<span className={classes}>{this.getValue()}</span>
+					</div>
+				:
+					<div className="valuewrap">
+						<div className="editable" onClick={this.disableEditModeAndSave}>save</div>
+						<textarea cols="20" rows={this.rows} className={classes} 
+							onChange={this.setValue} 
+							value={this.getValue()}/>
+					</div>
+				}
+
+			</div>
+		)
+	}
+}
+
+						//<input type={this.type} className={classes} 
+							//onChange={this.setValue} 
+							//value={this.getValue()}/>
 
 						//<div className="profile__row">
 							//<EventList 

@@ -7,6 +7,7 @@ import EventListCache from './EventListCache'
 class CurrentProfileStore {
 	@observable userUuid = "userUuidNS"
 	@observable fullname = "fullnameNS"
+	@observable about = "aboutNS"
 	status = "stateNotSet"
 
 	getKey(name) {
@@ -39,6 +40,11 @@ class CurrentProfileStore {
 		this.fullname = data.fullname
 		EventListCache.setEventList(this.sharedEventListKey, data.sharedEventUuids)
 		EventListCache.setEventList(this.slatedEventListKey, data.slatedEventUuids)
+	}
+
+	saveFieldToDb(field, value) {
+		// TODO: write update function to API
+
 	}
 
 }
