@@ -43,8 +43,14 @@ class CurrentProfileStore {
 	}
 
 	saveFieldToDb(field, value) {
-		// TODO: write update function to API
-
+		// TODO: use this field for creating an authorization failure test.
+		//userUuid: "00000000-0000-0000-0000-000000000003",
+		var data = {
+			userUuid: this.userUuid,
+			field: field,
+			value: this[field],
+		}
+		AxiosStore.ax.post("/user/updateField", data)
 	}
 
 }
