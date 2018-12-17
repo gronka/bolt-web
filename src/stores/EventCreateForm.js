@@ -4,7 +4,7 @@ import AxiosStore from './AxiosStore'
 import AuthStore from './AuthStore'
 import FlashStore from './FlashStore'
 import MapController from './MapController'
-import { isFloat, Loc, round } from '../helpers'
+import { isFloat, Loc, round, datetimeAsUnixTimestamp } from '../helpers'
 import { validateByName } from '../validation'
 
 
@@ -192,7 +192,9 @@ class EventCreateForm {
 
 	submit() {
 		// getTimzezoneOffset() returns offset in minutes
-		var tzOffset = this.startDate.getTimezoneOffset() * 60 * 1000
+		const tzOffset = this.startDate.getTimezoneOffset() * 60 * 1000
+		const startTimeUnix = datetimeAsUnixTimestamp(this.startDate)
+		const endTimeUnix = datetimeAsUnixTimestamp(this.endDate)
 
 		var data = {
 			"title": this.title,
@@ -200,8 +202,8 @@ class EventCreateForm {
 			"lat": parseFloat(this.lat),
 			"lng": parseFloat(this.lng),
 			"address": this.address,
-			"startTimeUnix": this.startDate.UTC(),
-			"endTimeUnix": this.endDate.UTC(),
+			"startTimeUnix": startTimeUnix,
+			"endTimeUnix": endTimeUnix,
 			"tzOffsetUnix": tzOffset,
 			"description": this.description,
 			"quickInfo": this.quickInfo,

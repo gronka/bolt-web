@@ -16,10 +16,10 @@ class MapController {
 
 		this.deets = MapSettingsStore.deets["events"]
 
-		this.listenerTypes = ["center_changed", "click"]
+		this.listenerTypes = ["bounds_changed", "click"]
 		this.mapTypes = {
 			landing: {
-				listeners: ["center_changed_get_tacs"],
+				listeners: ["bounds_changed_get_tacs"],
 				names: ["landing", "events", "food", "open"],
 			},
 			eventCreate: {
@@ -62,15 +62,13 @@ class MapController {
 		MapSettingsStore.deets[deets.name] = deets
 	}
 
-	addCenterChangedGetTacsListener() {
-		this.google.maps.event.addListener(this.map, 
-																			 'center_changed', 
-																			 debounce(function() {
-			if ( true ) {
-				// TODO: replace true with a test if freeze box is not checked
-				//this.map.getTacsInBounds();
-			}
-		}, 400));
+	addBoundsChangedGetTacsListener() {
+		this.google.maps.event.addListener(
+			this.map, 
+			'bounds_changed', 
+			debounce(() => {
+				this.getTacsInBounds()}, 400)
+		)
 	}
 
 	addCreateTacOnRightClickListener() {
@@ -145,8 +143,8 @@ class MapController {
 
 		for (var i=0; i < listeners.length; i++) {
 			var listener = listeners[i]
-			if (listener === "center_changed_get_tacs") {
-				this.addCenterChangedGetTacsListener()
+			if (listener === "bounds_changed_get_tacs") {
+				this.addBoundsChangedGetTacsListener()
 			}
 
 			if (listener === "create_tac_on_right_click") {
@@ -232,6 +230,38 @@ class MapController {
 		return emptyMarker
 	}
 
+	//
+	// Functions for Tac management
+	//
+	getTacsInBounds() {
+		if ( this.map !== "mapNS" ) {
+			// TODO: replace true with a test if freeze box is not checked
+			if (this.map.getBounds() == null) {
+				return
+			}
+
+			var bounds = this.map.getBounds()
+			var ne = bounds.getNorthEast()
+			var sw = bounds.getSouthWest()
+			let data = {
+				"ne": ne, 
+				"sw": sw,
+			}
+			//alert(JSON.stringify(data))
+
+			//AxiosStore.ax.get(path)
+				//.then((resp) => {
+						//this.markers[this.activeMap] = resp.data["m"]
+				//})
+			//this.markers.events = tacs
+			//var marker = new this.google.maps.Marker({
+				//map: this.maps[this.name],
+				//position: {lat: -25.363, lng: 131.044},
+				//title: 'Hello World!'
+			//});
+		}
+	}
+
 }
 
 
@@ -248,36 +278,3 @@ class Marker {
 
 const singleton = new MapController()
 export default singleton
-
-	//getTacsInBounds() {
-		//// TODO: detect lat and lng, then guess it. For now, it's Raleigh
-		////let data = {
-			////"lat": this.userLat,
-			////"lng": this.userLng,
-		////}
-		//// TODO: change this to /events/tacs or w.e it will be
-		//let path = "/events"
-
-		////AxiosStore.ax.get(path)
-			////.then((resp) => {
-					////this.markers[this.activeMap] = resp.data["m"]
-			////})
-
-		//let tacs = [
-			//{
-				//"tacid": "01234",
-				//"lat": -25.363,
-				//"lng": 131.044,
-				//"startTimeUnix": 1234908234338,
-				//"endTimeUnix": 47389147231908,
-			//}
-
-		//]
-
-		////this.markers.events = tacs
-		//var marker = new this.google.maps.Marker({
-			//map: this.maps[this.name],
-			//position: {lat: -25.363, lng: 131.044},
-			//title: 'Hello World!'
-		//});
-	//}

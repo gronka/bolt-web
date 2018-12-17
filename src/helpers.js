@@ -18,6 +18,11 @@ export function formatUnixTimeForEventLine(unixTime) {
 }
 
 
+export function datetimeAsUnixTimestamp(datetime) {
+	return Math.floor(datetime.getTime() / 1000)
+}
+
+
 export function formToJson(formId) {
 	let form = document.getElementById(formId)
 	let obj = {}
