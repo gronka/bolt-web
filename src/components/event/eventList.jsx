@@ -73,7 +73,7 @@ export class EventList extends Component {
 		} else {
 			jsx.push(
 				<div className="eventList__editMode"
-					onClick={this.toggleEditMode}
+					onClick={this.toggleEditModeAndSave}
 					key="save"
 					>
 						save
@@ -85,6 +85,11 @@ export class EventList extends Component {
 	}
 
 	toggleEditMode = () => this.eventList.editMode = !this.eventList.editMode
+	toggleEditModeAndSave = () => {
+		this.eventList.editMode = !this.eventList.editMode
+		this.eventList.saveToDb(this.name)
+	}
+
 
 	render() {
 		return (

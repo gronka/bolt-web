@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx'
 import AxiosStore from './AxiosStore'
 
+import AuthStore from './AuthStore'
 import MapController from './MapController'
 
 
@@ -38,6 +39,7 @@ class CurrentEventStore {
 	}
 
 	@action loadEventFromApi(resp) {
+		// TODO: update this event in EventCache
 		var data = resp.data.b
 		this.eventUuid = data.eventUuid
 		this.userUuid = data.userUuid
@@ -63,6 +65,16 @@ class CurrentEventStore {
 		MapController.panToPoint(point)
 
 		this.setStatus("ready")
+	}
+
+	addEventToList(listName) {
+		var data = {
+			userUuid: AuthStore.userUuid,
+			field: listName,
+			value: this.eventUuid,
+		}
+
+		AxiosStore.ax.post("/user/addEventToList", data)
 	}
 
 }

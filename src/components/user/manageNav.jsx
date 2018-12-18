@@ -66,6 +66,7 @@ export class ManageNav extends Component {
 				</div>
 
 				<div className="manageNav__body">
+					<Route exact path="/u/manage" component={Profile} />
 					<Route exact path="/u/manage/profile" component={Profile} />
 					<Route exact path="/u/manage/events" component={ManageEvents} />
 					<Route exact path="/u/manage/calendar" component={ManageEvents} />

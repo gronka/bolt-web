@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx'
 
+import AuthStore from './AuthStore'
+import AxiosStore from './AxiosStore'
 import EventCache from './EventCache'
 
 
@@ -104,6 +106,22 @@ class EventList {
 			this.uuids[idx+1] = this.uuids[idx]
 			this.uuids[idx] = dontForget
 		} 
+	}
+
+	saveToDb(listName) {
+		const listNameMap = {
+			shared: "sharedEventUuids",
+			slated: "slatedEventUuids",
+		}
+
+		var data = {
+			userUuid: AuthStore.userUuid,
+			field: listNameMap[listName],
+			value: this.uuids,
+		}
+		//debugger
+
+		AxiosStore.ax.post("/user/saveList", data)
 	}
 
 }

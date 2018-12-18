@@ -18,6 +18,10 @@ class EventPage extends Component {
 		this.CES.fetchEvent(this.eventUuid)
 	}
 
+	shareOnBolt = () => {
+		this.CES.addEventToList("sharedEventUuids")
+	}
+
 	render() {
 		return (
 			<div className="two-col-simple__form"
@@ -37,6 +41,14 @@ class EventPage extends Component {
 					<br />
 
 					{this.CES.description}
+
+					<div onClick={this.shareOnBolt}>
+						Share on Bolt
+					</div>
+
+					<div onClick={this.shareEvent}>
+						Share
+					</div>
 				</div>
 				
 				}

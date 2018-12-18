@@ -13,6 +13,10 @@ class CurrentProfileStore {
 	getKey(name) {
 		return EventListCache.makeKey(this.userUuid, name)
 	}
+	
+	@computed get adminEventListKey() {
+		return EventListCache.makeKey(this.userUuid, "admin")
+	}
 
 	@computed get sharedEventListKey() {
 		return EventListCache.makeKey(this.userUuid, "shared")
@@ -38,6 +42,7 @@ class CurrentProfileStore {
 	@action unpackProfileFromApi(data) {
 		this.userUuid = data.userUuid
 		this.fullname = data.fullname
+		EventListCache.setEventList(this.adminEventListKey, data.adminEventUuids)
 		EventListCache.setEventList(this.sharedEventListKey, data.sharedEventUuids)
 		EventListCache.setEventList(this.slatedEventListKey, data.slatedEventUuids)
 	}

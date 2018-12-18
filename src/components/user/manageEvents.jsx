@@ -10,12 +10,11 @@ import EventList from '../event/eventList'
 export class ManageEvents extends Component {
 
 	render() {
-		var listKey = this.props.CurrentProfileStore.sharedEventListKey
 		return (
 			<div>
 				<EventList 
 					title="Manage Your Events"
-					listKey={listKey}
+					name="admin"
 					canEdit={false}
 					/>
 			</div>
