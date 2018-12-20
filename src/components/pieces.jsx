@@ -3,6 +3,69 @@ import { inject, observer } from 'mobx-react'
 import Flatpickr from 'react-flatpickr'
 
 
+@inject('CurrentProfileStore',
+			  'CurrentEventStore')
+@observer
+export class EditableText extends Component {
+	constructor(props) {
+		super(props)
+		if (props.store === "CPS") {
+			this.store = props.CurrentProfileStore
+		}
+		if (props.store === "CES") {
+			this.store = props.CurrentEventStore
+		}
+
+		this.field = props.field
+		this.rows = props.rows
+		this.canEdit = props.canEdit
+
+		this.state = { editMode: false }
+	}
+
+	getValue() {
+		return this.store[this.field]
+	}
+
+	setValue = e => {
+		this.store[this.field] = e.target.value
+	}
+
+	enableEditMode = () => {
+		this.setState({ editMode: true })
+	}
+
+	disableEditModeAndSave = () => {
+		this.setState({ editMode: false })
+		this.store.saveFieldToDb(this.field, this.getValue())
+	}
+
+	render() {
+		const classes = "valuewrap " + this.store + "__" + this.field
+		return (
+			<div className="valuewrap">
+				{!this.state.editMode ?
+					<div className="valuewrap">
+						{this.canEdit &&
+							<div className="editable" onClick={this.enableEditMode}>edit</div>
+						}
+						<span className={classes}>{this.getValue()}</span>
+					</div>
+				:
+					<div className="valuewrap">
+						<div className="editable" onClick={this.disableEditModeAndSave}>save</div>
+						<textarea cols="20" rows={this.rows} className={classes} 
+							onChange={this.setValue} 
+							value={this.getValue()}/>
+					</div>
+				}
+
+			</div>
+		)
+	}
+}
+
+
 @inject('LoginForm', 'RegisterForm', 'EventCreateForm')
 @observer
 export class InputRow extends Component {

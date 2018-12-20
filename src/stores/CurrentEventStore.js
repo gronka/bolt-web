@@ -77,6 +77,25 @@ class CurrentEventStore {
 		AxiosStore.ax.post("/user/addEventToList", data)
 	}
 
+	saveFieldToDb(field, value) {
+		// TODO: use this field for creating an authorization failure test.
+		//eventUuid: "00000000-0000-0000-0000-000000000003",
+		var data = {
+			eventUuid: this.eventUuid,
+			field: field,
+			value: this[field],
+		}
+		AxiosStore.ax.post("/event/updateField", data)
+	}
+
+}
+
+
+class UserList {
+	@observable uuids = []
+	@observable names = []
+	@observable pics = []
+
 }
 
 

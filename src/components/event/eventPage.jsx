@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 
-import { getThreeLetterMonth } from '../../lib/dateHelpers'
+import { EditableText } from '../pieces'
 import GoogleMap from '../googleMap'
 
+import { getThreeLetterMonth } from '../../lib/dateHelpers'
 
-@inject('CurrentEventStore', 'MapController')
+
+@inject('CurrentEventStore', 'CurrentProfileStore', 'MapController')
 @observer
 class EventPage extends Component {
 	constructor(props) {
 		super(props)
 		this.CES = this.props.CurrentEventStore
+		this.CPS = this.props.CurrentProfileStore
 		this.eventUuid = props.match.params.eventUuid
+		this.userIsAdminOfEvent = this.CPS.userIsAdminOfEvent(this.eventUuid)
 	}
 
 	componentWillMount() {
@@ -30,7 +34,11 @@ class EventPage extends Component {
 				<div>
 
 				<h1>
-					{this.CES.title}
+					<EditableText field="title"
+						rows="1"
+						store="CES"
+						canEdit={this.userIsAdminOfEvent}
+					/>
 				</h1>
 
 					{getThreeLetterMonth(this.CES.startDate)}
@@ -39,8 +47,12 @@ class EventPage extends Component {
 					<br />
 					{this.CES.address}
 					<br />
+						<EditableText field="description"
+							rows="1"
+							store="CES"
+							canEdit={this.userIsAdminOfEvent}
+						/>
 
-					{this.CES.description}
 
 					<div onClick={this.shareOnBolt}>
 						Share on Bolt

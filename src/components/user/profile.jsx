@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 
+import { EditableText } from '../pieces'
 import EventList from '../event/eventList'
 
 
@@ -81,7 +82,7 @@ export class Profile extends Component {
 							<EditableText field="fullname"
 								rows="1"
 								store="CPS"
-								isCurrentUser={this.isCurrentUser}
+								canEdit={this.isCurrentUser}
 							/>
 							<span>Follow</span>
 						</div>
@@ -90,7 +91,7 @@ export class Profile extends Component {
 							<EditableText field="about"
 								rows="5"
 								store="CPS"
-								isCurrentUser={this.isCurrentUser}
+								canEdit={this.isCurrentUser}
 							/>
 						</div>
 
@@ -117,76 +118,5 @@ export class Profile extends Component {
 
 }
 
-
-@inject('CurrentProfileStore')
-@observer
-export class EditableText extends Component {
-	constructor(props) {
-		super(props)
-		if (props.store === "CPS") {
-			this.store = props.CurrentProfileStore
-		}
-
-		this.field = props.field
-		this.rows = props.rows
-		this.isCurrentUser = props.isCurrentUser
-
-		this.state = { editMode: false }
-	}
-
-	getValue() {
-		return this.store[this.field]
-	}
-
-	setValue = e => {
-		this.store[this.field] = e.target.value
-	}
-
-	enableEditMode = () => {
-		this.setState({ editMode: true })
-	}
-
-	disableEditModeAndSave = () => {
-		this.setState({ editMode: false })
-		this.store.saveFieldToDb(this.field, this.getValue())
-	}
-
-	render() {
-		const classes = "valuewrap " + this.store + "__" + this.field
-		return (
-			<div className="valuewrap">
-				{!this.state.editMode ?
-					<div className="valuewrap">
-						{this.isCurrentUser &&
-							<div className="editable" onClick={this.enableEditMode}>edit</div>
-						}
-						<span className={classes}>{this.getValue()}</span>
-					</div>
-				:
-					<div className="valuewrap">
-						<div className="editable" onClick={this.disableEditModeAndSave}>save</div>
-						<textarea cols="20" rows={this.rows} className={classes} 
-							onChange={this.setValue} 
-							value={this.getValue()}/>
-					</div>
-				}
-
-			</div>
-		)
-	}
-}
-
-						//<input type={this.type} className={classes} 
-							//onChange={this.setValue} 
-							//value={this.getValue()}/>
-
-						//<div className="profile__row">
-							//<EventList 
-								//title="Slated Events"
-								//source="currentUser"
-								//storeName="CurrentSlatedEventList"
-								//canEdit={this.isCurrentUser}
-								///>
-						//</div>
 
 export default Profile

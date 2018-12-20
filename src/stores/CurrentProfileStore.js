@@ -26,6 +26,16 @@ class CurrentProfileStore {
 		return EventListCache.makeKey(this.userUuid, "slated")
 	}
 
+	userIsAdminOfEvent(eventUuid) {
+		const adminList = EventListCache.getEventList(this.adminEventListKey)
+		for (var i=0; i<adminList.uuids.length; i++) {
+			if (eventUuid === adminList.uuids[i]) {
+				return true
+			}
+		}
+		return false
+	}
+
 	fetchProfile(userUuid) {
 		this.status = "fetchProfile"
 		AxiosStore.ax.get("/user/get/" + userUuid)
