@@ -5,7 +5,7 @@ import EventList from '../event/eventList'
 
 
 @inject(
-				'CurrentProfileStore')
+				'ViewingProfileStore')
 @observer
 export class ManageEvents extends Component {
 

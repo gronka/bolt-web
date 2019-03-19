@@ -11,7 +11,7 @@ import UiStore from './stores/UiStore'
 import HistoryController from './stores/HistoryController'
 import MapController from './stores/MapController'
 
-import CurrentProfileStore from './stores/CurrentProfileStore'
+import ViewingProfileStore from './stores/ViewingProfileStore'
 import LoginForm from './stores/LoginForm'
 import RegisterForm from './stores/RegisterForm'
 
@@ -41,7 +41,7 @@ const stores = {
 	HistoryController,
 	MapController,
 
-	CurrentProfileStore,
+	ViewingProfileStore,
 	LoginForm,
 	RegisterForm,
 

@@ -4,7 +4,7 @@ import { conf } from '../conf'
 import AuthStore from './AuthStore'
 import AxiosStore from './AxiosStore'
 import HistoryController from './HistoryController'
-import CurrentProfileStore from './CurrentProfileStore'
+import ViewingProfileStore from './ViewingProfileStore'
 import { comingFromPath } from '../helpers'
 
 
@@ -59,7 +59,7 @@ class LoginForm {
 		AuthStore.email = claims.email
 		AuthStore.userUuid = claims.userUuid
 		AuthStore.updateJwt(jwt)
-		CurrentProfileStore.fetchProfile(claims.userUuid)
+		ViewingProfileStore.getProfile(claims.userUuid)
 	}
 }
 

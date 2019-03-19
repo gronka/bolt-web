@@ -10,7 +10,7 @@ import { formatUnixTimeForEventLine } from '../../helpers'
 @inject('AxiosStore', 
 				'EventCache',
 				'EventListCache',
-				'CurrentProfileStore')
+				'ViewingProfileStore')
 @observer
 export class EventList extends Component {
 	constructor(props) {
@@ -25,7 +25,7 @@ export class EventList extends Component {
 	}
 
 	@computed get listKey() {
-		return this.props.CurrentProfileStore.getKey(this.name)
+		return this.props.ViewingProfileStore.getKey(this.name)
 	}
 
 	@computed get eventList() {
@@ -114,7 +114,7 @@ export class EventList extends Component {
 
 @inject('AxiosStore', 
 				'EventListCache',
-				'CurrentProfileStore')
+				'ViewingProfileStore')
 @observer
 export class EventLine extends Component {
 	// A single item in the EventList component
@@ -132,7 +132,7 @@ export class EventLine extends Component {
 	}
 
 	@computed get listKey() {
-		return this.props.CurrentProfileStore.getKey(this.name)
+		return this.props.ViewingProfileStore.getKey(this.name)
 	}
 
 	@computed get eventList() {

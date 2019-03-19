@@ -3,14 +3,14 @@ import { inject, observer } from 'mobx-react'
 import Flatpickr from 'react-flatpickr'
 
 
-@inject('CurrentProfileStore',
+@inject('ViewingProfileStore',
 			  'CurrentEventStore')
 @observer
 export class EditableText extends Component {
 	constructor(props) {
 		super(props)
-		if (props.store === "CPS") {
-			this.store = props.CurrentProfileStore
+		if (props.store === "VPS") {
+			this.store = props.ViewingProfileStore
 		}
 		if (props.store === "CES") {
 			this.store = props.CurrentEventStore

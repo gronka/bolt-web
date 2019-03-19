@@ -6,7 +6,7 @@ import EventList from '../event/eventList'
 
 
 @inject('AuthStore', 
-				'CurrentProfileStore')
+				'ViewingProfileStore')
 @observer
 export class Profile extends Component {
 
@@ -22,11 +22,11 @@ export class Profile extends Component {
 			this.isCurrentUser = true
 		}
 
-		this.CPS = this.props.CurrentProfileStore
+		this.VPS = this.props.ViewingProfileStore
 	}
 
 	componentWillMount() {
-		this.CPS.fetchProfile(this.userUuid)
+		this.VPS.getProfile(this.userUuid)
 	}
 
 	renderHeader() {
@@ -81,7 +81,7 @@ export class Profile extends Component {
 						<div className="profile__row">
 							<EditableText field="fullname"
 								rows="1"
-								store="CPS"
+								store="VPS"
 								canEdit={this.isCurrentUser}
 							/>
 							<span>Follow</span>
@@ -90,7 +90,7 @@ export class Profile extends Component {
 						<div className="profile__row">
 							<EditableText field="about"
 								rows="5"
-								store="CPS"
+								store="VPS"
 								canEdit={this.isCurrentUser}
 							/>
 						</div>

@@ -7,15 +7,15 @@ import GoogleMap from '../googleMap'
 import { getThreeLetterMonth } from '../../lib/dateHelpers'
 
 
-@inject('CurrentEventStore', 'CurrentProfileStore', 'MapController')
+@inject('CurrentEventStore', 'ViewingProfileStore', 'MapController')
 @observer
 class EventPage extends Component {
 	constructor(props) {
 		super(props)
 		this.CES = this.props.CurrentEventStore
-		this.CPS = this.props.CurrentProfileStore
+		this.VPS = this.props.ViewingProfileStore
 		this.eventUuid = props.match.params.eventUuid
-		this.userIsAdminOfEvent = this.CPS.userIsAdminOfEvent(this.eventUuid)
+		this.userIsAdminOfEvent = this.VPS.userIsAdminOfEvent(this.eventUuid)
 	}
 
 	componentWillMount() {
