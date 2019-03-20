@@ -21,23 +21,41 @@ export class EditableText extends Component {
 		this.canEdit = props.canEdit
 
 		this.state = { editMode: false }
+
+		this.valueBeforeEdit = ""
+		this.valueAfterEdit = ""
 	}
 
 	getValue() {
 		return this.store[this.field]
 	}
 
-	setValue = e => {
-		this.store[this.field] = e.target.value
+	setValueFromE = e => {
+		this.setValue(e.target.value)
+	}
+
+	setValue = value => {
+		this.store[this.field] = value
 	}
 
 	enableEditMode = () => {
 		this.setState({ editMode: true })
+		this.valueBeforeEdit = this.getValue()
 	}
 
 	disableEditModeAndSave = () => {
 		this.setState({ editMode: false })
+		this.valueAfterEdit = this.getValue()
+		if (this.valueBeforeEdit === this.valueAfterEdit) {
+			return
+		}
+		// TODO: if save fails, reset value
 		this.store.saveFieldToDb(this.field, this.getValue())
+	}
+
+	disableEditModeAndDontSave = () => {
+		this.setState({ editMode: false })
+		this.setValue(this.valueBeforeEdit)
 	}
 
 	render() {
@@ -54,8 +72,9 @@ export class EditableText extends Component {
 				:
 					<div className="valuewrap">
 						<div className="editable" onClick={this.disableEditModeAndSave}>save</div>
+						<div className="editable" onClick={this.disableEditModeAndDontSave}>XXX</div>
 						<textarea cols="20" rows={this.rows} className={classes} 
-							onChange={this.setValue} 
+							onChange={this.setValueFromE} 
 							value={this.getValue()}/>
 					</div>
 				}

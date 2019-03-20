@@ -7,7 +7,6 @@ import EventCache from './EventCache'
 
 class EventListCache {
 	@observable lists = {}
-	@observable querying = []
 
 	makeKey(uuid, name) {
 		return uuid + "-" + name
@@ -51,14 +50,6 @@ class EventListCache {
 	@action loadEventFromApi(resp, eventUuid) {
 		var body = JSON.parse(JSON.stringify(resp.data.b))
 		this.events[eventUuid].setAllFromApi(body)
-		this.stopQuerying(eventUuid)
-	}
-
-	stopQuerying(eventUuid) {
-		var idx = this.querying.indexOf(eventUuid)
-		if (idx !== -1) {
-			this.querying.splice(idx)
-		}
 	}
 
 }

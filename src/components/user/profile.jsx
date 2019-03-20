@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react'
 import { EditableText } from '../pieces'
 import EventList from '../event/eventList'
 
+import Log from '../../Log'
+
 
 @inject('AuthStore', 
 				'ViewingProfileStore')
@@ -12,21 +14,23 @@ export class Profile extends Component {
 
 	constructor(props) {
 		super(props)
-
-		this.userUuid = this.props.match.params.userUuid
-		this.isCurrentUser = false
-		if (this.userUuid == null) {
-			this.userUuid = this.props.AuthStore.userUuid
-		} 
-		if (this.userUuid === this.props.AuthStore.userUuid) {
-			this.isCurrentUser = true
-		}
-
 		this.VPS = this.props.ViewingProfileStore
+		this.profileUuid = this.whichProfileUuid()
+		this.isProfileCurrentUser = this.VPS.isProfileCurrentUser(this.profileUuid)
+	}
+
+	whichProfileUuid() {
+		if (this.props.match.params.userUuid) {
+			return this.props.match.params.userUuid
+		} 
+		if (this.props.match.path === "/u/manage/profile") {
+			return this.props.AuthStore.userUuid
+		}
 	}
 
 	componentWillMount() {
-		this.VPS.getProfile(this.userUuid)
+		this.VPS.getProfile(this.profileUuid)
+		Log.debug("Mounting profile component for user " + this.profileUuid)
 	}
 
 	renderHeader() {
@@ -59,7 +63,7 @@ export class Profile extends Component {
 							<EventList 
 								title="Shared Events"
 								name="shared"
-								canEdit={this.isCurrentUser}
+								canEdit={this.isProfileCurrentUser}
 								/>
 						</div>
 
@@ -67,7 +71,7 @@ export class Profile extends Component {
 							<EventList 
 								title="Slated Events"
 								name="slated"
-								canEdit={this.isCurrentUser}
+								canEdit={this.isProfileCurrentUser}
 								/>
 						</div>
 
@@ -82,7 +86,7 @@ export class Profile extends Component {
 							<EditableText field="fullname"
 								rows="1"
 								store="VPS"
-								canEdit={this.isCurrentUser}
+								canEdit={this.isProfileCurrentUser}
 							/>
 							<span>Follow</span>
 						</div>
@@ -91,7 +95,7 @@ export class Profile extends Component {
 							<EditableText field="about"
 								rows="5"
 								store="VPS"
-								canEdit={this.isCurrentUser}
+								canEdit={this.isProfileCurrentUser}
 							/>
 						</div>
 

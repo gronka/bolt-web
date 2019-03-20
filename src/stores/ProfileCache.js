@@ -8,7 +8,7 @@ class ProfileCache extends Cache {
 }
 
 
-class Profile {
+export class Profile {
 	@observable userUuid = ""
 	@observable fullname = ""
 	@observable about = ""
@@ -47,9 +47,11 @@ class Profile {
 		return this.fullname
 	}
 	
-	@action setAllFromApi(body) {
+	@action unpackItemFromApi(body) {
 		this.userUuid = body.userUuid
 		this.fullname = body.fullname
+		this.about = body.about
+		this.status = body.status
 
 		EventListCache.setEventList(this.adminEventListKey, body.adminEventUuids)
 		EventListCache.setEventList(this.sharedEventListKey, body.sharedEventUuids)

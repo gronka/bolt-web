@@ -1,15 +1,29 @@
 import { computed, observable } from 'mobx'
 
-import ProfileCache from './ProfileCache'
+import AuthStore from './AuthStore'
 import Capsule from './lib/Capsule'
+import ProfileCache from './ProfileCache'
+import { Profile } from './ProfileCache'
+import Log from '../Log'
 
 
 class ViewingProfileStore extends Capsule {
 	@observable userUuid = "userUuidNS"
 	@observable fullname = "fullnameNS"
 	@observable about = "aboutNS"
-	@observable cacheRef = "cacheRefNS"
+	cacheRef = new Profile()
 	capsulePost = "/user/updateField"
+
+	isProfileCurrentUser(profileUuid) {
+		// TODO: basically assume that if url is '/profile' then give edit access
+		if (profileUuid == null) {
+			profileUuid = AuthStore.userUuid
+		} 
+		if (profileUuid === AuthStore.userUuid) {
+			return true
+		}
+		return false
+	}
 
 	getKey(name) {
 		return this.cacheRef.getKey(name)
@@ -31,8 +45,15 @@ class ViewingProfileStore extends Capsule {
 		return this.cacheRef.userIsAdminOfEvent(eventUuid)
 	}
 
-	getProfile(userUuid) {
-		this.cacheRef = ProfileCache.getItem(this.userUuid)
+	async getProfile(userUuid) {
+		//if (userUuid)
+		Log.debug("Getting profile: " + JSON.stringify(userUuid))
+		this.cacheRef = await ProfileCache.getItem(userUuid)
+
+		this.userUuid = this.cacheRef.userUuid
+		this.fullname = this.cacheRef.fullname
+		this.about = this.cacheRef.about
+		this.status = this.cacheRef.status
 	}
 
 	prepCapsule(field, value) {

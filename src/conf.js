@@ -1,4 +1,5 @@
 export const conf = {
+	"env": "dev",
 	"bapi": "http://localhost:9090/v1",
 	//"autoLogin": true,
 	"autoLogin": true,

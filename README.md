@@ -1,8 +1,6 @@
 
 
 ## TODO
-* if no changes to field in profile, do not commit
-* change edit on shared events to 'reorder' or something like that
 * get event map screencaps
 * get event logos
 * confirm on logout
@@ -16,13 +14,13 @@
 * perhaps grey-out-slant fields that are empty on profile but can be added (website would prob be a common one)
 
 ## BIG TODO
+* extend caches from Cache class
 * add groups
 * add businesses
 * should businesses be a special type of group?
 * various calendar views
 * event filters on landings
 * what should browse be?
-* create caching for virtually all API requested data (will simplifiy logic in some ways)
 * discord like group joins
 ..* including secret groups
 ..* including secrete events

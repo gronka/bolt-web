@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import BaseRouter from './components/base'
 import { Provider } from 'mobx-react'
 
+import { conf } from './conf'
+
 import AuthStore from './stores/AuthStore'
 import AxiosStore from './stores/AxiosStore'
 import FlashStore from './stores/FlashStore'
@@ -31,6 +33,12 @@ import './styles/custom-lat-lng.css'
 import './styles/markers.css'
 import './styles/profile.css'
 import 'flatpickr/dist/themes/material_green.css'
+
+
+if (conf["env"] !== "prod") {
+	localStorage.setItem("debug", "bolt:*")
+} 
+
 
 const stores = {
 	AuthStore,
