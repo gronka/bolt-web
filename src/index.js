@@ -19,7 +19,7 @@ import RegisterForm from './stores/RegisterForm'
 
 import EventCache from './stores/EventCache'
 import EventListCache from './stores/EventListCache'
-import CurrentEventStore from './stores/CurrentEventStore'
+import ViewingEventStore from './stores/ViewingEventStore'
 import EventCreateForm from './stores/EventCreateForm'
 
 import './styles/base.css'
@@ -55,7 +55,7 @@ const stores = {
 
 	EventCache,
 	EventListCache,
-	CurrentEventStore,
+	ViewingEventStore,
 	EventCreateForm,
 }
 

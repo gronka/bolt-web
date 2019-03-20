@@ -7,49 +7,49 @@ import GoogleMap from '../googleMap'
 import { getThreeLetterMonth } from '../../lib/dateHelpers'
 
 
-@inject('CurrentEventStore', 'ViewingProfileStore', 'MapController')
+@inject('ViewingEventStore', 'ViewingProfileStore', 'MapController')
 @observer
 class EventPage extends Component {
 	constructor(props) {
 		super(props)
-		this.CES = this.props.CurrentEventStore
+		this.VES = this.props.ViewingEventStore
 		this.VPS = this.props.ViewingProfileStore
 		this.eventUuid = props.match.params.eventUuid
 		this.userIsAdminOfEvent = this.VPS.userIsAdminOfEvent(this.eventUuid)
 	}
 
 	componentWillMount() {
-		this.CES.fetchEvent(this.eventUuid)
+		this.VES.fetchEvent(this.eventUuid)
 	}
 
 	shareOnBolt = () => {
-		this.CES.addEventToList("sharedEventUuids")
+		this.VES.addEventToList("sharedEventUuids")
 	}
 
 	render() {
 		return (
 			<div className="two-col-simple__form"
 				id="form-register">
-				{this.CES.loaded &&
+				{this.VES.loaded &&
 				<div>
 
 				<h1>
 					<EditableText field="title"
 						rows="1"
-						store="CES"
+						store="VES"
 						canEdit={this.userIsAdminOfEvent}
 					/>
 				</h1>
 
-					{getThreeLetterMonth(this.CES.startDate)}
+					{getThreeLetterMonth(this.VES.startDate)}
 					<br />
-					{this.CES.startDate.getDate()}
+					{this.VES.startDate.getDate()}
 					<br />
-					{this.CES.address}
+					{this.VES.address}
 					<br />
 						<EditableText field="description"
 							rows="1"
-							store="CES"
+							store="VES"
 							canEdit={this.userIsAdminOfEvent}
 						/>
 

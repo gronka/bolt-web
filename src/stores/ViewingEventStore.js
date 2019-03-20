@@ -5,7 +5,7 @@ import AuthStore from './AuthStore'
 import MapController from './MapController'
 
 
-class CurrentEventStore {
+class ViewingEventStore {
 	// TODO: load the Event class from EvenchCache.js? Wrap that instead?
 	@observable eventUuid = "eventUuidNS"
 	@observable userUuid = "userUuidNS"
@@ -99,5 +99,5 @@ class UserList {
 }
 
 
-const singleton = new CurrentEventStore()
+const singleton = new ViewingEventStore()
 export default singleton

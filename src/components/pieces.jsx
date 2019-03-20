@@ -4,7 +4,7 @@ import Flatpickr from 'react-flatpickr'
 
 
 @inject('ViewingProfileStore',
-			  'CurrentEventStore')
+			  'ViewingEventStore')
 @observer
 export class EditableText extends Component {
 	constructor(props) {
@@ -12,8 +12,8 @@ export class EditableText extends Component {
 		if (props.store === "VPS") {
 			this.store = props.ViewingProfileStore
 		}
-		if (props.store === "CES") {
-			this.store = props.CurrentEventStore
+		if (props.store === "VES") {
+			this.store = props.ViewingEventStore
 		}
 
 		this.field = props.field
