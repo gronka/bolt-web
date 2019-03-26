@@ -19,6 +19,9 @@ export default class Capsule {
 	saveFieldToDb(field, value) {
 		// TODO: use this field for creating an authorization failure test.
 		//userUuid: "00000000-0000-0000-0000-000000000003",
+		//
+		// TODO: don't save if cached data does not equal current data. Maybe make
+		// a function called checkCache
 		var data = this.prepCapsule(field, value)
 		AxiosStore.ax.post(this.capsulePost, data)
 	}

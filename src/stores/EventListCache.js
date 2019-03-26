@@ -1,122 +1,41 @@
-import { observable, action } from 'mobx'
-
 import AuthStore from './AuthStore'
 import AxiosStore from './AxiosStore'
+import Cache from './lib/Cache'
 import EventCache from './EventCache'
 
 
-class EventListCache {
-	@observable lists = {}
+// EventLists are looked up with the following info
+// types: user, group, business
+// listNames: shared, slated, admin
 
-	makeKey(uuid, name) {
-		return uuid + "-" + name
+class EventListCache extends Cache {
+	setFromProfile(userUuid, body) {
+		var adminEventList = new EventList()
+		adminEventList.uuids = body.adminEventUuids
+		this.setItem("user/admin/" + this.userUuid, body.adminEventUuids)
+
+		var sharedEventList = new EventList()
+		sharedEventList.uuids = body.sharedEventUuids
+		this.setItem("user/shared/" + this.userUuid, body.sharedEventUuids)
+
+		var slatedEventList = new EventList()
+		slatedEventList.uuids = body.slatedEventUuids
+		this.setItem("user/slated/" + this.userUuid, body.slatedEventUuids)
+
 	}
-
-	@action setEventList(key, eventList) {
-		if (this.lists[key] == null) {
-			this.lists[key] = new EventList()
-		} 
-		this.lists[key].uuids = eventList
-	}
-
-	getEventList(key) {
-		if (this.lists[key] == null) {
-			// TODO: store time retrieved, update if cached item is old
-			this.lists[key] = new EventList()
-			//this.getEventListFromApi(uuid, name)
-		} 
-		return this.lists[key]
-	}
-
-	@action getEventListFromApi(key) {
-		// TODO: is this function needed?
-		alert("ended up getting event list from api")
-		// Make sure event isn't being queried
-		//var queryingIdx = this.querying.indexOf(eventUuid)
-		//if (queryingIdx > -1) {
-			//return
-		//}
-
-		//// note that event is being queried
-		//this.querying.push(eventUuid)
-		//AxiosStore.ax.get("/events/get/" + eventUuid)
-		//.then((resp) => {
-			//if (resp.status === 200) {
-				//this.loadEventFromApi(resp, eventUuid)
-			//}
-		//})
-	}
-
-	@action loadEventFromApi(resp, eventUuid) {
-		var body = JSON.parse(JSON.stringify(resp.data.b))
-		this.events[eventUuid].setAllFromApi(body)
-	}
-
+	
 }
 
-class EventList {
-	@observable uuids = ["00000000-0000-0000-0000-000000000003"]
-	@observable editMode = false
 
-	@action clearEvents() {
-		this.uuids = []
-	}
+export class EventList {
+	uuids = ["00000000-0000-0000-0000-000000000003"]
 
-	@action getInitialEvents() {
-		for (var i=0; i<this.uuids.length; i++) {
-			var id = this.uuids[i]
-			EventCache.getEvent(id)
-
-		}
-	}
-
-	@action remove(uuid) {
-		var idx = this.uuids.indexOf(uuid)
-		if (idx > -1) {
-			this.uuids.splice(idx, 1)
-		}
-	}
-
-	@action moveUp(uuid) {
-		var idx = this.uuids.indexOf(uuid)
-		if (idx === -1 || idx === 0) {
-			// do nothing
-		} else {
-			var dontForget = this.uuids[idx-1]
-			this.uuids[idx-1] = this.uuids[idx]
-			this.uuids[idx] = dontForget
-		} 
-	}
-
-	@action moveDown(uuid) {
-		var idx = this.uuids.indexOf(uuid)
-		if (idx === -1 || idx === (this.uuids.length-1)) {
-			// do nothing
-		} else {
-			var dontForget = this.uuids[idx+1]
-			this.uuids[idx+1] = this.uuids[idx]
-			this.uuids[idx] = dontForget
-		} 
-	}
-
-	saveToDb(listName) {
-		const listNameMap = {
-			shared: "sharedEventUuids",
-			slated: "slatedEventUuids",
-		}
-
-		var data = {
-			userUuid: AuthStore.userUuid,
-			field: listNameMap[listName],
-			value: this.uuids,
-		}
-		//debugger
-
-		AxiosStore.ax.post("/user/saveList", data)
-	}
+	//unpackItemFromApi(body) {
+		//this.uuids = body
+	//}
 
 }
 
 
-const singleton = new EventListCache()
+const singleton = new EventListCache(EventList, "/eventList/get/")
 export default singleton

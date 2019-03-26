@@ -14,6 +14,7 @@ export class ManageEvents extends Component {
 			<div>
 				<EventList 
 					title="Manage Your Events"
+					uuid={this.props.ViewingProfileStore.userUuid}
 					name="admin"
 					canEdit={false}
 					/>

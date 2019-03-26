@@ -2,10 +2,13 @@ import { observable, action } from 'mobx'
 import AxiosStore from './AxiosStore'
 
 import AuthStore from './AuthStore'
+import Capsule from './lib/Capsule'
+import EventCache, { Event } from './EventCache'
+import Log from '../Log'
 import MapController from './MapController'
 
 
-class ViewingEventStore {
+class ViewingEventStore extends Capsule {
 	// TODO: load the Event class from EvenchCache.js? Wrap that instead?
 	@observable eventUuid = "eventUuidNS"
 	@observable userUuid = "userUuidNS"
@@ -22,24 +25,20 @@ class ViewingEventStore {
 	@observable tzId = "tzIdNS"
 	@observable tzName = "tzNameNS"
 
-	status = "stateNotSet"
+	cacheRef = new Event()
+	capsulePost = "/event/updateField"
+
 	@observable loaded = false
 
-	fetchEvent(eventUuid) {
+	async getEvent(eventUuid) {
+		Log.debug("Getting event: " + JSON.stringify(eventUuid))
 		this.loaded = false
-		this.status = "fetchEvent"
-		AxiosStore.ax.get("/events/get/" + eventUuid)
-		.then((resp) => {
-			this.loadEventFromApi(resp)
-		})
+		this.cacheRef = await EventCache.getItem(eventUuid)
+
+		this.loadEventFromCache(this.cacheRef)
 	}
 
-	setStatus(status) {
-		this.status = status
-	}
-
-	@action loadEventFromApi(resp) {
-		// TODO: update this event in EventCache
+	@action loadEventFromCache(resp) {
 		var data = resp.data.b
 		this.eventUuid = data.eventUuid
 		this.userUuid = data.userUuid
@@ -55,6 +54,7 @@ class ViewingEventStore {
 		this.tzOffsetUnix = data.tzOffsetUnix
 		this.tzId = data.tzId
 		this.tzName = data.tzName
+
 		this.loaded = true
 
 		var point = {
@@ -64,7 +64,6 @@ class ViewingEventStore {
 		MapController.updateMarkersByType("unary", point)
 		MapController.panToPoint(point)
 
-		this.setStatus("ready")
 	}
 
 	addEventToList(listName) {
@@ -77,15 +76,12 @@ class ViewingEventStore {
 		AxiosStore.ax.post("/user/addEventToList", data)
 	}
 
-	saveFieldToDb(field, value) {
-		// TODO: use this field for creating an authorization failure test.
-		//eventUuid: "00000000-0000-0000-0000-000000000003",
-		var data = {
+	prepCapsule(field, value) {
+		return {
 			eventUuid: this.eventUuid,
 			field: field,
 			value: this[field],
 		}
-		AxiosStore.ax.post("/event/updateField", data)
 	}
 
 }

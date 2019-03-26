@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { computed } from 'mobx'
 import { inject, observer } from 'mobx-react'
 
 import { EditableText } from '../pieces'
@@ -8,6 +9,8 @@ import Log from '../../Log'
 
 
 @inject('AuthStore', 
+				'EventListCache',
+				'EventListViewerOne',
 				'ViewingProfileStore')
 @observer
 export class Profile extends Component {
@@ -26,11 +29,16 @@ export class Profile extends Component {
 		if (this.props.match.path === "/u/manage/profile") {
 			return this.props.AuthStore.userUuid
 		}
+		if (this.props.match.path === "/u/manage") {
+			return this.props.AuthStore.userUuid
+		}
 	}
 
 	componentWillMount() {
 		this.VPS.getProfile(this.profileUuid)
 		Log.debug("Mounting profile component for user " + this.profileUuid)
+		this.props.EventListViewerOne.getEventList("user", "shared", this.profileUuid)
+		this.props.EventListViewerOne.getEventList("user", "slated", this.profileUuid)
 	}
 
 	renderHeader() {
@@ -62,17 +70,18 @@ export class Profile extends Component {
 							<span>TODO: maybe indicate if this person is a manager vs simply sharing</span>
 							<EventList 
 								title="Shared Events"
-								name="shared"
+								store="EventListViewerOne"
 								canEdit={this.isProfileCurrentUser}
 								/>
 						</div>
 
 						<div className="profile__row">
-							<EventList 
+							EventList 
 								title="Slated Events"
+								uuid={this.VPS.userUuid}
 								name="slated"
 								canEdit={this.isProfileCurrentUser}
-								/>
+								/
 						</div>
 
 					</div>

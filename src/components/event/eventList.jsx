@@ -10,6 +10,7 @@ import { formatUnixTimeForEventLine } from '../../helpers'
 @inject('AxiosStore', 
 				'EventCache',
 				'EventListCache',
+				'EventListViewerOne',
 				'ViewingProfileStore')
 @observer
 export class EventList extends Component {
@@ -20,37 +21,28 @@ export class EventList extends Component {
 		} else {
 			this.canEdit = false
 		}
-		this.name = props.name
 
-	}
-
-	@computed get listKey() {
-		return this.props.ViewingProfileStore.getKey(this.name)
-	}
-
-	@computed get eventList() {
-		return this.props.EventListCache.getEventList(this.listKey)
+		if (props.store === "EventListViewerOne") {
+			this.store = props.EventListViewerOne
+		} else if (props.store === "EventListViewerTwo") {
+			this.store = props.EventListViewerTwo
+		}
 	}
 
 	renderInitialEvents() {
-		if (this.eventList == null) {
-			return(
-				<div>no events</div>
-			)
+		
+		if (this.store.uuids === "uuidsNS") {
+			return
 		}
-		if (this.eventList.uuids.length === 0) {
-			return(
-				<div>no events</div>
-			)
+		//debugger
 
-		}
-		const jsx = this.eventList.uuids.map(
+		const jsx = this.store.uuids.map(
 			(function(uuid, i)  {
-				var event = this.props.EventCache.getEvent(uuid)
+				var event = this.props.EventCache.getItem(uuid)
 				return(
 					<EventLine event={event} 
 						key={i}
-						name={this.name}
+						eventItem={uuid}
 					/>
 				)
 			}.bind(this)
@@ -61,7 +53,7 @@ export class EventList extends Component {
 
 	renderToggleEditMode() {
 		var jsx = []
-		if (!this.eventList.editMode) {
+		if (!this.store.editMode) {
 			jsx.push(
 				<div className="eventList__editMode"
 					onClick={this.toggleEditMode}
@@ -84,10 +76,10 @@ export class EventList extends Component {
 		return jsx
 	}
 
-	toggleEditMode = () => this.eventList.editMode = !this.eventList.editMode
+	toggleEditMode = () => this.store.editMode = !this.store.editMode
 	toggleEditModeAndSave = () => {
-		this.eventList.editMode = !this.eventList.editMode
-		this.eventList.saveToDb(this.name)
+		this.store.editMode = !this.store.editMode
+		this.store.saveToDb(this.name)
 	}
 
 
@@ -101,6 +93,7 @@ export class EventList extends Component {
 					{this.canEdit &&
 					this.renderToggleEditMode()
 					}
+					
 				</div>
 
 				<div className="eventList__lines">
@@ -125,18 +118,15 @@ export class EventLine extends Component {
 		this.mapCapUrl = conf.eventMiniMapCapUrl + props.UUID
 
 		this.name = props.name
+		this.uuid = props.uuid
 
 		this.remove = this.remove.bind(this)
 		this.moveUp = this.moveUp.bind(this)
 		this.moveDown = this.moveDown.bind(this)
 	}
 
-	@computed get listKey() {
-		return this.props.ViewingProfileStore.getKey(this.name)
-	}
-
 	@computed get eventList() {
-		return this.props.EventListCache.getEventList(this.listKey)
+		return this.props.EventListCache.getItem(this.uuid, this.name)
 	}
 
 	useBackupLogo = e => {

@@ -1,54 +1,14 @@
 import { action, computed, observable } from 'mobx'
 import AxiosStore from './AxiosStore'
 
+import Cache from './lib/Cache'
 
-class EventCache {
-	@observable events = {}
-	@observable querying = []
 
-	@action getEvent(eventUuid) {
-		if (this.events[eventUuid] == null) {
-			// TODO: store time retrieved, update if cached item is old
-			this.events[eventUuid] = new Event()
-			this.getEventFromApi(eventUuid)
-		} 
-		return this.events[eventUuid]
-	}
-
-	@action getEventFromApi(eventUuid) {
-		// Make sure event isn't being queried
-		var queryingIdx = this.querying.indexOf(eventUuid)
-		if (queryingIdx > -1) {
-			return
-		}
-
-		// note that event is being queried
-		this.querying.push(eventUuid)
-		AxiosStore.ax.get("/events/get/" + eventUuid)
-		.then((resp) => {
-			if (resp.status === 200) {
-				this.loadEventFromApi(resp, eventUuid)
-			}
-		})
-	}
-
-	@action loadEventFromApi(resp, eventUuid) {
-		var body = JSON.parse(JSON.stringify(resp.data.b))
-		this.events[eventUuid].setAllFromApi(body)
-		this.stopQuerying(eventUuid)
-	}
-
-	stopQuerying(eventUuid) {
-		var idx = this.querying.indexOf(eventUuid)
-		if (idx !== -1) {
-			this.querying.splice(idx)
-		}
-	}
-
+class EventCache extends Cache {
 }
 
 
-class Event {
+export class Event {
 	@observable eventUuid = ""
 	@observable userUuid = ""
 	@observable seshUuid = ""
@@ -79,7 +39,7 @@ class Event {
 		return this.address
 	}
 	
-	@action setAllFromApi(body) {
+	@action unpackItemFromApi(body) {
 		this.eventUuid = body.eventUuid
 		this.userUuid = body.userUuid
 		this.seshUuid = body.seshUuid
@@ -100,5 +60,5 @@ class Event {
 }
 
 
-const singleton = new EventCache()
+const singleton = new EventCache(Event, "/events/get/")
 export default singleton

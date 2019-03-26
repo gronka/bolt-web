@@ -1,9 +1,8 @@
-import { computed, observable } from 'mobx'
+import { action, computed, observable } from 'mobx'
 
 import AuthStore from './AuthStore'
 import Capsule from './lib/Capsule'
-import ProfileCache from './ProfileCache'
-import { Profile } from './ProfileCache'
+import ProfileCache, { Profile } from './ProfileCache'
 import Log from '../Log'
 
 
@@ -28,25 +27,20 @@ class ViewingProfileStore extends Capsule {
 	getKey(name) {
 		return this.cacheRef.getKey(name)
 	}
-	
-	@computed get adminEventListKey() {
-		return this.cacheRef.adminEventListKey()
-	}
-
-	@computed get sharedEventListKey() {
-		return this.cacheRef.sharedEventListKey()
-	}
-
-	@computed get slatedEventListKey() {
-		return this.cacheRef.slatedEventListKey()
-	}
 
 	userIsAdminOfEvent(eventUuid) {
 		return this.cacheRef.userIsAdminOfEvent(eventUuid)
 	}
 
+	// TODO: update values in the cacheRef as well
+	@action setFullname(p) {
+		this.fullname = p
+	}
+	@computed get getFullname() {
+		return this.fullname
+	}
+
 	async getProfile(userUuid) {
-		//if (userUuid)
 		Log.debug("Getting profile: " + JSON.stringify(userUuid))
 		this.cacheRef = await ProfileCache.getItem(userUuid)
 
